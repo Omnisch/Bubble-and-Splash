@@ -17,7 +17,6 @@ void setup()
   balls = new ArrayList<Balloon>();
   setTTL = true;
 }
-
 void draw()
 {
   tryBlurCanvas(canvas);
@@ -35,23 +34,31 @@ void draw()
 }
 
 
+
 // messages
 void keyPressed()
 {
   switch (key)
   {
+    // set a cluster
     case ' ':
       setCluster(mouseX, mouseY); break;
+    // blow away balloons
     case 'b':
       blowAll(); break;
+    // clear canvas
     case 'c':
       canvas = newCanvas(); break;
+    // flush all balloons to drops
     case 'f':
       flushAll(); break;
+    // enable TTL
     case 'i':
       setTTL = true; break;
+    // disable TTL
     case 'o':
       setTTL = false; break;
+    // save current frame to file
     case 's':
       saveFrame(); break;
   }
@@ -62,7 +69,10 @@ void mouseWheel(MouseEvent event)
   scale = constrain(scale, 2, 16);
 }
 
-void blowAll()
+
+
+// custom functions
+void blowAll() //<>//
 {
   for (int i = 0; i < balls.size(); i++)
     balls.get(i).blowFrom(mouseX, mouseY);
@@ -72,7 +82,7 @@ void flushAll()
   for (int i = balls.size() - 1; i >= 0; i--)
     balls.get(i).flushToCanvas();
 }
-Balloon setBalloon(int x, int y) //<>//
+Balloon setBalloon(int x, int y)
 {
   if (balls.size() < 512)
   {
