@@ -3,6 +3,8 @@ PGraphics canvas;
 ArrayList<Balloon> balls;
 boolean setTTL;
 
+int uiColumnWidth = 200;
+
 void setup()
 {
   stroke(0xff363532);
@@ -11,7 +13,7 @@ void setup()
   ellipseMode(RADIUS);
   
   img = loadImage("resources/mona_lisa.jpg");
-  windowResize(img.width, img.height);
+  windowResize(img.width+uiColumnWidth, img.height);
 
   canvas = newCanvas();
   balls = new ArrayList<Balloon>();
@@ -70,9 +72,9 @@ void mouseWheel(MouseEvent event)
 }
 
 
-
+ //<>//
 // custom functions
-void blowAll() //<>//
+void blowAll()
 {
   for (int i = 0; i < balls.size(); i++)
     balls.get(i).blowFrom(mouseX, mouseY);
