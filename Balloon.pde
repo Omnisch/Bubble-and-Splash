@@ -1,7 +1,3 @@
-float fraction = 0.125;
-float gravity = 0;
-int initTTL = 256;
-int scale = 8;
 
 class Balloon
 {
@@ -13,9 +9,9 @@ class Balloon
   PImage img;
   PGraphics canvas;
   ArrayList<Balloon> parent;
-  int TTL;
+  int TTL, initTTL;
   
-  Balloon(int x, int y, PImage img, PGraphics canvas, int TTL)
+  Balloon(int x, int y, int scale, PImage img, PGraphics canvas, int TTL)
   {
     this.vel = new PVector();
     this.acc = new PVector();
@@ -25,7 +21,7 @@ class Balloon
     this.canvas = canvas;
     this.parent = null;
     setCoord(x, y);
-    this.TTL = TTL;
+    this.TTL = this.initTTL = TTL;
   }
   
   void onDraw()
@@ -42,7 +38,9 @@ class Balloon
         (int)((pixel >> 16 & 0xff) * 0.299) +
         (int)((pixel >> 8  & 0xff) * 0.587) +
         (int)((pixel       & 0xff) * 0.114);
-      float grayScale = map(TTL, initTTL, 0, 0, 1);
+      // initTTL+2 to ensure when TTL==-1(infinity)
+      // the balloon is colored
+      float grayScale = map(TTL, initTTL+2, 0, 0, 1);
       stroke(0xff363532);
       fill(lerpColor(color(grayValue), pixel, grayScale));
     }

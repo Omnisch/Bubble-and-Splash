@@ -1,14 +1,9 @@
 // global fields
 PImage img;
 PGraphics canvas;
-ArrayList<Balloon> balls;
+ArrayList<Balloon> balloons;
 GUI gui;
-
-
-
-// GUI variables
-int TTL;
-String imagePath = "resources/mona_lisa.jpg";
+int scale = 8;
 
 
 
@@ -28,7 +23,7 @@ void setup()
   
   img = loadImage(imagePath);
   canvas = newCanvas();
-  balls = new ArrayList<Balloon>();
+  balloons = new ArrayList<Balloon>();
   gui = new GUI(this).init();
   
   windowResize(img.width+gui.columnWidth, img.height);
@@ -42,8 +37,8 @@ void draw()
     if (mouseX < img.width)
       setBalloon(mouseX, mouseY);
   
-  for (int i = 0; i < balls.size(); i++)
-    balls.get(i).onDraw();
+  for (int i = 0; i < balloons.size(); i++)
+    balloons.get(i).onDraw();
     
   stroke(0xff363532);
   noFill();
@@ -79,31 +74,40 @@ void mouseWheel(MouseEvent event)
   scale += -event.getCount();
   scale = constrain(scale, 2, 16);
 }
+void controlEvent(ControlEvent event)
+{
+  if (gui == null) return;
+  
+  if (event.isFrom("gravity"))
+    gui.clampTTL();
+  else if (event.isFrom("TTL"))
+    gui.checkEdgeTTL();
+}
 
 
  //<>//
 // custom functions
 void blowAll()
 {
-  for (int i = 0; i < balls.size(); i++)
-    balls.get(i).blowFrom(mouseX, mouseY);
+  for (int i = 0; i < balloons.size(); i++)
+    balloons.get(i).blowFrom(mouseX, mouseY);
 }
 void flushAll()
 {
-  for (int i = balls.size() - 1; i >= 0; i--)
-    balls.get(i).flushToCanvas();
+  for (int i = balloons.size() - 1; i >= 0; i--)
+    balloons.get(i).flushToCanvas();
 }
 Balloon setBalloon(int x, int y)
 {
-  if (balls.size() < 512)
+  if (balloons.size() < 512)
   {
-    Balloon ball = new Balloon(
+    Balloon balloon = new Balloon(
       x + round(random(-1, 1)),
       y + round(random(-1, 1)),
-      img, canvas, TTL);
-    balls.add(ball);
-    ball.parent = balls;
-    return ball;
+      scale, img, canvas, TTL);
+    balloons.add(balloon);
+    balloon.parent = balloons;
+    return balloon;
   }
   else
     return null;
