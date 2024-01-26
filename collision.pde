@@ -58,9 +58,6 @@ void keyPressed()
     // blow away balloons
     case 'b':
       blowAll(); break;
-    // save current frame to file
-    case 's':
-      saveFrame(); break;
   }
 }
 void mouseWheel(MouseEvent event)

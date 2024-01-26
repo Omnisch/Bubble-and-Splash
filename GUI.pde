@@ -27,7 +27,7 @@ class GUI
       cp.addButton("clearCanvas")
         .setSize(200, 20)
       ,false).getCaptionLabel().setText("clear  canvas").setColor(0xff);
-      
+    
     // poke all
     arrangeControllers(
       cp.addButton("pokeAll")
@@ -59,6 +59,12 @@ class GUI
         .setColorTickMark(0)
         .setValue(0)
       ,true);
+    
+    // save frame
+    arrangeControllers(
+      cp.addButton("saveFrame")
+        .setSize(200, 20)
+      ,false).getCaptionLabel().setText("save  current  frame").setColor(0xff);
     
     return this;
   }
