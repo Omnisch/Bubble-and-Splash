@@ -58,9 +58,6 @@ void keyPressed()
     // blow away balloons
     case 'b':
       blowAll(); break;
-    // flush all balloons to drops
-    case 'f':
-      flushAll(); break;
     // save current frame to file
     case 's':
       saveFrame(); break;
@@ -80,11 +77,6 @@ void blowAll()
   for (int i = 0; i < balloons.size(); i++)
     balloons.get(i).blowFrom(mouseX, mouseY);
 }
-void flushAll()
-{
-  for (int i = balloons.size() - 1; i >= 0; i--)
-    balloons.get(i).flushToCanvas();
-}
 Balloon setBalloon(int x, int y)
 {
   if (balloons.size() < 512)
@@ -97,7 +89,7 @@ Balloon setBalloon(int x, int y)
     balloon.parent = balloons;
     return balloon;
   }
-  else //<>//
+  else
     return null;
 }
 void setCluster(int x, int y)

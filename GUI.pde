@@ -26,8 +26,13 @@ class GUI
     arrangeControllers(
       cp.addButton("clearCanvas")
         .setSize(200, 20)
-        .setValue(0)
-      ,false).getCaptionLabel().setColor(255);
+      ,false).getCaptionLabel().setText("clear  canvas").setColor(0xff);
+      
+    // poke all
+    arrangeControllers(
+      cp.addButton("pokeAll")
+        .setSize(200, 20)
+      ,false).getCaptionLabel().setText("poke  all").setColor(0xff);
     
     // TTL
     TTLSlider = (Slider)arrangeControllers(
@@ -89,6 +94,12 @@ void controlEvent(ControlEvent event)
 void clearCanvas()
 {
   canvas = newCanvas();
+}
+// called by button pokeAll
+void pokeAll()
+{
+  for (int i = balloons.size() - 1; i >= 0; i--)
+    balloons.get(i).flushToCanvas();
 }
 // called by slider TTL
 void checkTTLEdge()
