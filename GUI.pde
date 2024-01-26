@@ -5,6 +5,7 @@ String imagePath = "resources/mona_lisa.jpg";
 int TTL;
 float fraction;
 float gravity;
+boolean darkMode;
 
 
 
@@ -56,9 +57,17 @@ class GUI
         .setSize(200, 20)
         .setRange(0, 3)
         .setNumberOfTickMarks(7)
-        .setColorTickMark(0)
+        .showTickMarks(false)
         .setValue(0)
       ,true);
+    
+    // dark mode
+    arrangeControllers(
+      cp.addToggle("darkMode")
+        .setSize(60, 20)
+        .setValue(false)
+        .setMode(ControlP5.SWITCH)
+      ,true).getCaptionLabel().setText("dark  mode");
     
     // save frame
     arrangeControllers(
@@ -75,7 +84,7 @@ class GUI
   Controller arrangeControllers(Controller ctrl, boolean align)
   {
     ctrl.setPosition(cx(), cy());
-    ctrl.getCaptionLabel().setColor(0).getFont().setSize(20);
+    ctrl.getCaptionLabel().setColor(0xff2255bb).getFont().setSize(20);
     ctrl.getValueLabel().getFont().setSize(16);
     if (align) ctrl.getCaptionLabel().align(ControlP5.LEFT, ControlP5.TOP_OUTSIDE);
     return ctrl;
