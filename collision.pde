@@ -25,6 +25,7 @@ void setup()
   ellipseMode(RADIUS);
   
   tryLoadImage();
+  bleedingY += constrain((600-img.height)/2, 0, 300);
   canvas = newCanvas();
   balloons = new ArrayList<Balloon>();
   gui = new GUI(this).init();

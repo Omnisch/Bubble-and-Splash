@@ -67,7 +67,28 @@ class GUI
         .setSize(200, 20)
         .setRange(0, 255)
         .setValue(63)
-      ,true).getCaptionLabel().setText("image alpha");
+      ,true).getCaptionLabel().setText("image  alpha");
+    
+    // auto blur
+    arrangeControllers(
+      cp.addToggle("autoBlur")
+        .setSize(60, 20)
+        .setValue(true)
+      ,true).getCaptionLabel().setText("auto  blur");
+    
+    // highlight
+    arrangeControllers(
+      cp.addToggle("highlight")
+        .setSize(60, 20)
+        .setValue(true)
+      ,true);
+    
+    // hide stroke
+    arrangeControllers(
+      cp.addToggle("hideStroke")
+        .setSize(60, 20)
+        .setValue(false)
+      ,true).getCaptionLabel().setText("hide  stroke");
     
     // dark mode
     arrangeControllers(
@@ -98,8 +119,8 @@ class GUI
     return ctrl;
   }
   int controllerCount = 0;
-  int cx() { return img.width + 2*bleedingX + 30; }
-  int cy() { return ++controllerCount * 50 + bleedingY; }
+  int cx() { return img.width + 2*bleedingX + 10; }
+  int cy() { return ++controllerCount * 50 + 30; }
 }
 
 
