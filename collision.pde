@@ -23,7 +23,10 @@ void setup()
   strokeWeight(2);
   ellipseMode(RADIUS);
   
-  tryLoadImage();
+  if (!tryLoadImage())
+  {
+    exit(); return;
+  };
   bleedingY += constrain((600-img.height)/2, 0, 300);
   canvas = newCanvas();
   balloons = new ArrayList<Balloon>();
@@ -76,16 +79,15 @@ void mouseWheel(MouseEvent event)
 
 
 // custom functions
-void tryLoadImage()
+boolean tryLoadImage()
 {
   String[] extensions = { ".jpg", ".png", ".gif", };
   for (int i = 0; i < extensions.length; i++)
   {
     img = loadImage(imgPath + extensions[i]);
-    if (img != null) return;
+    if (img != null) return true;
   }
-  // failed to load any image, exit program
-  exit();
+  return false;
 }
 void blowAll()
 {
