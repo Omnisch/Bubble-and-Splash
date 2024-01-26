@@ -33,7 +33,9 @@ void setup()
 void draw()
 {
   background(darkMode ? 0xff1d1d1f : 0xfff5f5f7);
-  //image(img, bleedingX, bleedingY);
+  tint(0xff, imageAlpha);
+  image(img, bleedingX, bleedingY);
+  tint(0xff);
   tryBlurCanvas(canvas);
   image(canvas, 0, 0);
   

@@ -5,6 +5,7 @@ String imagePath = "resources/mona_lisa.jpg";
 int TTL;
 float fraction;
 float gravity;
+int imageAlpha;
 boolean darkMode;
 
 
@@ -60,6 +61,14 @@ class GUI
         .showTickMarks(false)
         .setValue(0)
       ,true);
+    
+    // original image
+    arrangeControllers(
+      cp.addSlider("imageAlpha")
+        .setSize(200, 20)
+        .setRange(0, 255)
+        .setValue(63)
+      ,true).getCaptionLabel().setText("image alpha");
     
     // dark mode
     arrangeControllers(
