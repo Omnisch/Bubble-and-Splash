@@ -1,5 +1,5 @@
 // global fields
-String imgPath = "resources/original.jpg";
+String imgPath = "resources/original";
 PImage img;
 PGraphics canvas;
 ArrayList<Balloon> balloons;
@@ -24,7 +24,7 @@ void setup()
   //noStroke();
   ellipseMode(RADIUS);
   
-  img = loadImage(imgPath);
+  tryLoadImage();
   canvas = newCanvas();
   balloons = new ArrayList<Balloon>();
   gui = new GUI(this).init();
@@ -75,6 +75,17 @@ void mouseWheel(MouseEvent event)
 
 
 // custom functions
+void tryLoadImage()
+{
+  String[] extensions = { ".jpg", ".png", ".gif", };
+  for (int i = 0; i < extensions.length; i++)
+  {
+    img = loadImage(imgPath + extensions[i]);
+    if (img != null) return;
+  }
+  // failed to load any image, exit program
+  exit();
+}
 void blowAll()
 {
   for (int i = 0; i < balloons.size(); i++)
