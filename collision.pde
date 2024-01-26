@@ -1,5 +1,5 @@
 // global fields
-String imgPath = "resources/original";
+String imgPath = "data/original";
 PImage img;
 PGraphics canvas;
 ArrayList<Balloon> balloons;
