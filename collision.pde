@@ -1,15 +1,22 @@
+// global fields
 PImage img;
 PGraphics canvas;
 ArrayList<Balloon> balls;
+GUI gui;
+
+
+
+// GUI variables
 int TTL;
+String imagePath = "resources/mona_lisa.jpg";
 
-// UI properties
-import controlP5.*;
-ControlP5 cp5;
-int uiColumnWidth = 240;
 
+
+// main loop
 void settings()
 {
+  // need to cover the whole screen first
+  // so that controlP5 won't do culling
   size(displayWidth, displayHeight);
 }
 void setup()
@@ -19,22 +26,12 @@ void setup()
   //noStroke();
   ellipseMode(RADIUS);
   
-  img = loadImage("resources/mona_lisa.jpg");
-  windowResize(img.width+uiColumnWidth, img.height);
-
+  img = loadImage(imagePath);
   canvas = newCanvas();
   balls = new ArrayList<Balloon>();
+  gui = new GUI(this).init();
   
-  
-  // UI init
-  cp5 = new ControlP5(this);
-  
-  cp5.addSlider("TTL")
-     .setPosition(img.width+20,50)
-     .setSize(200,20)
-     .setRange(0,512)
-     .setValue(256)
-     ;
+  windowResize(img.width+gui.columnWidth, img.height);
 }
 void draw()
 {
