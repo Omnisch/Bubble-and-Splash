@@ -21,7 +21,6 @@ void setup()
 {
   stroke(0xff363532);
   strokeWeight(2);
-  //noStroke();
   ellipseMode(RADIUS);
   
   tryLoadImage();
@@ -38,7 +37,8 @@ void draw()
   tint(0xff, imageAlpha);
   image(img, bleedingX, bleedingY);
   tint(0xff);
-  tryBlurCanvas(canvas);
+  if (autoBlur)
+    tryBlurCanvas(canvas);
   image(canvas, 0, 0);
   
   if (mousePressed)

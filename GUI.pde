@@ -5,6 +5,9 @@ int TTL;
 float fraction;
 float gravity;
 int imageAlpha;
+boolean autoBlur;
+boolean hideStroke;
+boolean highlight;
 boolean darkMode;
 
 
@@ -76,19 +79,19 @@ class GUI
         .setValue(true)
       ,true).getCaptionLabel().setText("auto  blur");
     
-    // highlight
-    arrangeControllers(
-      cp.addToggle("highlight")
-        .setSize(60, 20)
-        .setValue(true)
-      ,true);
-    
     // hide stroke
     arrangeControllers(
       cp.addToggle("hideStroke")
         .setSize(60, 20)
         .setValue(false)
       ,true).getCaptionLabel().setText("hide  stroke");
+    
+    // highlight
+    arrangeControllers(
+      cp.addToggle("highlight")
+        .setSize(60, 20)
+        .setValue(true)
+      ,true);
     
     // dark mode
     arrangeControllers(
@@ -122,6 +125,7 @@ class GUI
   int cx() { return img.width + 2*bleedingX + 10; }
   int cy() { return ++controllerCount * 50 + 30; }
 }
+
 
 
 // messages

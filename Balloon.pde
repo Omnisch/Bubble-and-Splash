@@ -40,15 +40,22 @@ class Balloon
       // initTTL+2 to ensure when TTL==-1(infinity)
       // the balloon is colored
       float grayScale = map(TTL, initTTL+2, 0, 0, 1);
-      stroke(0xff363532);
+      // stroke
+      if (hideStroke)
+        noStroke();
+      else
+        stroke(0xff363532);
       fill(lerpColor(color(grayValue), pixel, grayScale));
     }
     ellipse(coord.x, coord.y, radius, radius);
     
     // highlight
-    noStroke();
-    fill(0xddffffff);
-    ellipse(coord.x-radius/3, coord.y-radius/3, radius/3, radius/3);
+    if (highlight)
+    {
+      noStroke();
+      fill(0xddffffff);
+      ellipse(coord.x-radius/3, coord.y-radius/3, radius/3, radius/3);
+    }
     
     TTLCheck();
   }
