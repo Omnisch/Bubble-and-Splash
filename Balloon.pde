@@ -29,7 +29,7 @@ class Balloon
     calcVel();
     calcPos();
     
-    int pixel = img.pixels[(int)coord.x + (int)coord.y*img.width];
+    int pixel = img.pixels[(int)coord.x-bleedingX + (int)(coord.y-bleedingY)*img.width];
     //int fade = (int)map(TTL, initTTL, 0, 0x0, 0xff);
     //fill(pixel & ((fade << 24) + 0xffffff));
     {
@@ -45,7 +45,7 @@ class Balloon
     }
     ellipse(coord.x, coord.y, radius, radius);
     
-    // Highlight
+    // highlight
     noStroke();
     fill(0xddffffff);
     ellipse(coord.x-radius/3, coord.y-radius/3, radius/3, radius/3);
@@ -54,14 +54,14 @@ class Balloon
   }
   void TTLCheck()
   {
-    if (TTL == 0) flushToCanvas();
+    if (TTL == 0) poke();
     if (TTL >= 0) TTL--;
   }
-  void flushToCanvas()
+  void poke()
   {
     Drop corpse = new Drop(
       (int)coord.x, (int)coord.y, radius*1.2, vel,
-      img.pixels[(int)coord.x + (int)coord.y*img.width], canvas);
+      img.pixels[(int)coord.x-bleedingX + (int)(coord.y-bleedingY)*img.width], canvas);
     corpse.splash();
     //canvas.fill(img.pixels[(int)coord.x + (int)coord.y*img.width] & 0x80ffffff);
     //canvas.ellipse(coord.x, coord.y, radius, radius);
@@ -71,10 +71,10 @@ class Balloon
   
   
   
-  // PHYSICAL CALCULATION
-  
+  // physics calculation
   void collisionTest()
   {
+    // collision force
     for (int i = 0; i < parent.size(); i++)
     {
       Balloon target = parent.get(i);
@@ -94,18 +94,18 @@ class Balloon
     }
     
     // border
-    if (coord.x+radius >= img.width)
+    if (coord.x+radius >= img.width + bleedingX)
       addForce(PVector.mult(PVector.sub
-        (new PVector(img.width-1 - radius, coord.y), coord).normalize(), mass));
-    if (coord.x-radius < 0)
+        (new PVector(img.width+bleedingX-radius, coord.y), coord).normalize(), mass));
+    if (coord.x-radius < bleedingX)
       addForce(PVector.mult(PVector.sub
-        (new PVector(radius, coord.y), coord).normalize(), mass));
-    if (coord.y+radius >= img.height)
+        (new PVector(bleedingX+radius, coord.y), coord).normalize(), mass));
+    if (coord.y+radius >= img.height + bleedingY)
       addForce(PVector.mult(PVector.sub
-        (new PVector(coord.x, img.height-1 - radius), coord).normalize(), mass));
-    if (coord.y-radius < 0)
+        (new PVector(coord.x, img.height+bleedingY-radius), coord).normalize(), mass));
+    if (coord.y-radius < bleedingY)
       addForce(PVector.mult(PVector.sub
-        (new PVector(coord.x, radius), coord).normalize(), mass));
+        (new PVector(coord.x, bleedingY+radius), coord).normalize(), mass));
   }
   void blowFrom(float x, float y)
   {
@@ -148,7 +148,7 @@ class Balloon
   void setCoord(PVector v)
   {
     coord = v;
-    coord.x = constrain(coord.x, 0, img.width-1);
-    coord.y = constrain(coord.y, 0, img.height-1);
+    coord.x = constrain(coord.x, bleedingX, img.width+bleedingX-1);
+    coord.y = constrain(coord.y, bleedingY, img.height+bleedingY-1);
   }
 }

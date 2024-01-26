@@ -81,8 +81,8 @@ class GUI
     return ctrl;
   }
   int controllerCount = 0;
-  int cx() { return img.width + 30; }
-  int cy() { return ++controllerCount * 50; }
+  int cx() { return img.width + 2*bleedingX + 30; }
+  int cy() { return ++controllerCount * 50 + bleedingY; }
 }
 
 
@@ -105,7 +105,7 @@ void clearCanvas()
 void pokeAll()
 {
   for (int i = balloons.size() - 1; i >= 0; i--)
-    balloons.get(i).flushToCanvas();
+    balloons.get(i).poke();
 }
 // called by slider TTL
 void checkTTLEdge()

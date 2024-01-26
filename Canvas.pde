@@ -4,8 +4,6 @@ PGraphics newCanvas()
   PGraphics canvas;
   canvas = createGraphics(width, height);
   canvas.beginDraw();
-  canvas.background(0xfff5f5f7);
-  //canvas.background(0xff1d1d1f);
   canvas.ellipseMode(RADIUS);
   canvas.endDraw();
   return canvas;
@@ -31,6 +29,7 @@ void blurCanvas(PGraphics canvas)
       }
   blurred.updatePixels();
   canvas.beginDraw();
+  canvas.clear();
   canvas.image(blurred, 0, 0);
   canvas.endDraw();
 }

@@ -3,6 +3,8 @@ PImage img;
 PGraphics canvas;
 ArrayList<Balloon> balloons;
 GUI gui;
+int bleedingX = 50;
+int bleedingY = 50;
 int scale = 8;
 
 
@@ -26,16 +28,18 @@ void setup()
   balloons = new ArrayList<Balloon>();
   gui = new GUI(this).init();
   
-  windowResize(img.width+gui.columnWidth, img.height);
+  windowResize(img.width+2*bleedingX+gui.columnWidth, img.height+2*bleedingY);
 }
 void draw()
 {
+  background(0xfff5f5f7);
+  //background(0xff1d1d1f);
+  //image(img, bleedingX, bleedingY);
   tryBlurCanvas(canvas);
   image(canvas, 0, 0);
   
   if (mousePressed)
-    if (mouseX < img.width)
-      setBalloon(mouseX, mouseY);
+    setBalloon(mouseX, mouseY);
   
   for (int i = 0; i < balloons.size(); i++)
     balloons.get(i).onDraw();
@@ -76,6 +80,11 @@ void blowAll()
 }
 Balloon setBalloon(int x, int y)
 {
+  // border limits
+  if (x < bleedingX || x > bleedingX+img.width) return null;
+  if (y < bleedingY || y > bleedingY+img.height) return null;
+  
+  
   if (balloons.size() < 512)
   {
     Balloon balloon = new Balloon(
