@@ -1,4 +1,5 @@
 // global fields
+String imgPath = "resources/original.jpg";
 PImage img;
 PGraphics canvas;
 ArrayList<Balloon> balloons;
@@ -23,7 +24,7 @@ void setup()
   //noStroke();
   ellipseMode(RADIUS);
   
-  img = loadImage(imagePath);
+  img = loadImage(imgPath);
   canvas = newCanvas();
   balloons = new ArrayList<Balloon>();
   gui = new GUI(this).init();

@@ -1,7 +1,6 @@
 import controlP5.*;
 
 // GUI variables
-String imagePath = "resources/mona_lisa.jpg";
 int TTL;
 float fraction;
 float gravity;
