@@ -58,9 +58,6 @@ void keyPressed()
     // blow away balloons
     case 'b':
       blowAll(); break;
-    // clear canvas
-    case 'c':
-      canvas = newCanvas(); break;
     // flush all balloons to drops
     case 'f':
       flushAll(); break;
@@ -74,18 +71,9 @@ void mouseWheel(MouseEvent event)
   scale += -event.getCount();
   scale = constrain(scale, 2, 16);
 }
-void controlEvent(ControlEvent event)
-{
-  if (gui == null) return;
-  
-  if (event.isFrom("gravity"))
-    gui.clampTTL();
-  else if (event.isFrom("TTL"))
-    gui.checkEdgeTTL();
-}
 
 
- //<>//
+
 // custom functions
 void blowAll()
 {
@@ -109,7 +97,7 @@ Balloon setBalloon(int x, int y)
     balloon.parent = balloons;
     return balloon;
   }
-  else
+  else //<>//
     return null;
 }
 void setCluster(int x, int y)

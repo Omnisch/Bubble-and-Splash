@@ -1,4 +1,3 @@
-
 class Balloon
 {
   PVector coord;
