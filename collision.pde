@@ -1,10 +1,17 @@
 PImage img;
 PGraphics canvas;
 ArrayList<Balloon> balls;
-boolean setTTL;
+int TTL;
 
-int uiColumnWidth = 200;
+// UI properties
+import controlP5.*;
+ControlP5 cp5;
+int uiColumnWidth = 240;
 
+void settings()
+{
+  size(displayWidth, displayHeight);
+}
 void setup()
 {
   stroke(0xff363532);
@@ -17,7 +24,17 @@ void setup()
 
   canvas = newCanvas();
   balls = new ArrayList<Balloon>();
-  setTTL = true;
+  
+  
+  // UI init
+  cp5 = new ControlP5(this);
+  
+  cp5.addSlider("TTL")
+     .setPosition(img.width+20,50)
+     .setSize(200,20)
+     .setRange(0,512)
+     .setValue(256)
+     ;
 }
 void draw()
 {
@@ -25,7 +42,8 @@ void draw()
   image(canvas, 0, 0);
   
   if (mousePressed)
-    setBalloon(mouseX, mouseY);
+    if (mouseX < img.width)
+      setBalloon(mouseX, mouseY);
   
   for (int i = 0; i < balls.size(); i++)
     balls.get(i).onDraw();
@@ -54,12 +72,6 @@ void keyPressed()
     // flush all balloons to drops
     case 'f':
       flushAll(); break;
-    // enable TTL
-    case 'i':
-      setTTL = true; break;
-    // disable TTL
-    case 'o':
-      setTTL = false; break;
     // save current frame to file
     case 's':
       saveFrame(); break;
@@ -91,7 +103,7 @@ Balloon setBalloon(int x, int y)
     Balloon ball = new Balloon(
       x + round(random(-1, 1)),
       y + round(random(-1, 1)),
-      img, canvas, setTTL);
+      img, canvas, TTL);
     balls.add(ball);
     ball.parent = balls;
     return ball;

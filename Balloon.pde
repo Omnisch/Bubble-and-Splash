@@ -15,7 +15,7 @@ class Balloon
   ArrayList<Balloon> parent;
   int TTL;
   
-  Balloon(int x, int y, PImage img, PGraphics canvas, boolean setTTL)
+  Balloon(int x, int y, PImage img, PGraphics canvas, int TTL)
   {
     this.vel = new PVector();
     this.acc = new PVector();
@@ -25,8 +25,7 @@ class Balloon
     this.canvas = canvas;
     this.parent = null;
     setCoord(x, y);
-    if (setTTL) TTL = initTTL;
-    else TTL = -1;
+    this.TTL = TTL;
   }
   
   void onDraw()
