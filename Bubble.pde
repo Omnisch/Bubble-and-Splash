@@ -1,4 +1,4 @@
-class Balloon
+class Bubble
 {
   PVector coord;
   PVector vel;
@@ -7,10 +7,10 @@ class Balloon
   float mass;
   PImage img;
   PGraphics canvas;
-  ArrayList<Balloon> parent;
+  ArrayList<Bubble> parent;
   int TTL, initTTL;
   
-  Balloon(int x, int y, int scale, PImage img, PGraphics canvas, int TTL)
+  Bubble(int x, int y, int scale, PImage img, PGraphics canvas, int TTL)
   {
     this.vel = new PVector();
     this.acc = new PVector();
@@ -38,7 +38,7 @@ class Balloon
         (int)((pixel >> 8  & 0xff) * 0.587) +
         (int)((pixel       & 0xff) * 0.114);
       // initTTL+2 to ensure when TTL==-1(infinity)
-      // the balloon is colored
+      // the bubble is colored
       float grayScale = map(TTL, initTTL+2, 0, 0, 1);
       // stroke
       if (hideStroke)
@@ -66,10 +66,10 @@ class Balloon
   }
   void poke()
   {
-    Drop corpse = new Drop(
+    Splash corpse = new Splash(
       (int)coord.x, (int)coord.y, radius*1.2, vel,
       img.pixels[(int)coord.x-bleedingX + (int)(coord.y-bleedingY)*img.width], canvas);
-    corpse.splash();
+    corpse.onDraw();
     //canvas.fill(img.pixels[(int)coord.x + (int)coord.y*img.width] & 0x80ffffff);
     //canvas.ellipse(coord.x, coord.y, radius, radius);
     
@@ -84,7 +84,7 @@ class Balloon
     // collision force
     for (int i = 0; i < parent.size(); i++)
     {
-      Balloon target = parent.get(i);
+      Bubble target = parent.get(i);
       if (target == this) continue;
       
       float dist = PVector.dist(coord, target.coord);

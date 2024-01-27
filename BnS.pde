@@ -2,7 +2,7 @@
 String imgPath = "data/original";
 PImage img;
 PGraphics canvas;
-ArrayList<Balloon> balloons;
+ArrayList<Bubble> bubbles;
 GUI gui;
 int bleedingX = 50;
 int bleedingY = 50;
@@ -28,7 +28,7 @@ void setup()
     exit(); return;
   };
   canvas = newCanvas();
-  balloons = new ArrayList<Balloon>();
+  bubbles = new ArrayList<Bubble>();
   gui = new GUI(this).init();
   
   bleedingY += constrain((600-img.height)/2, 0, 300);
@@ -45,10 +45,10 @@ void draw()
   image(canvas, 0, 0);
   
   if (mousePressed && mouseButton == LEFT)
-    setBalloon(mouseX, mouseY);
+    setBubble(mouseX, mouseY);
   
-  for (int i = 0; i < balloons.size(); i++)
-    balloons.get(i).onDraw();
+  for (int i = 0; i < bubbles.size(); i++)
+    bubbles.get(i).onDraw();
     
   stroke(0xff363532);
   noFill();
@@ -91,35 +91,35 @@ boolean tryLoadImage()
   }
   return false;
 }
-// blow away balloons
+// blow away bubbles
 void blowAll()
 {
-  for (int i = 0; i < balloons.size(); i++)
-    balloons.get(i).blowFrom(mouseX, mouseY);
+  for (int i = 0; i < bubbles.size(); i++)
+    bubbles.get(i).blowFrom(mouseX, mouseY);
 }
-Balloon setBalloon(int x, int y)
+Bubble setBubble(int x, int y)
 {
   // border limits
   if (x < bleedingX || x > bleedingX+img.width) return null;
   if (y < bleedingY || y > bleedingY+img.height) return null;
   
   
-  if (balloons.size() < 512)
+  if (bubbles.size() < 512)
   {
-    Balloon balloon = new Balloon(
+    Bubble bubble = new Bubble(
       x + round(random(-1, 1)),
       y + round(random(-1, 1)),
       scale, img, canvas, TTL);
-    balloons.add(balloon);
-    balloon.parent = balloons;
-    return balloon;
+    bubbles.add(bubble);
+    bubble.parent = bubbles;
+    return bubble;
   }
   else
     return null;
 }
-// set a cluster of balloons
+// set a cluster of bubbles
 void setCluster(int x, int y)
 {
   for (int i = 0; i < 64; i++)
-    setBalloon(x, y);
+    setBubble(x, y);
 }

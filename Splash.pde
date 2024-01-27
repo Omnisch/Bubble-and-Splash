@@ -1,4 +1,4 @@
-class Drop
+class Splash
 {
   int x, y;
   float size;
@@ -6,7 +6,7 @@ class Drop
   color colour;
   PGraphics canvas;
   
-  Drop(int x, int y, float size, PVector velocity, color colour, PGraphics canvas)
+  Splash(int x, int y, float size, PVector velocity, color colour, PGraphics canvas)
   {
     this.x = x;
     this.y = y;
@@ -16,7 +16,7 @@ class Drop
     this.canvas = canvas;
   }
   
-  void splash()
+  void onDraw()
   {
     float angle = velocity.magSq() > 4 ? velocity.heading() : PI/2;
     float dither = random(1, 6);
