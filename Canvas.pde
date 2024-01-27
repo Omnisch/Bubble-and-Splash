@@ -1,4 +1,12 @@
-// Canvas Functions
+//
+//
+//
+// canvas fields
+int blurLoopTick = 0;
+
+
+
+// canvas functions
 PGraphics newCanvas()
 {
   PGraphics canvas;
@@ -41,5 +49,9 @@ void tryBlurCanvas(PGraphics canvas)
     blurCanvas(canvas);
   }
 }
-
-int blurLoopTick = 0;
+void drawCanvas()
+{
+  if (autoBlur)
+    tryBlurCanvas(canvas);
+  image(canvas, 0, 0);
+}

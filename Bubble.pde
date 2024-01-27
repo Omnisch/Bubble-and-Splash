@@ -1,3 +1,13 @@
+//
+//
+//
+// bubble fields
+ArrayList<Bubble> bubbles;
+int scale = 8;
+
+
+
+// single object bubble
 class Bubble
 {
   PVector coord;
@@ -158,4 +168,46 @@ class Bubble
     coord.x = constrain(coord.x, bleedingX, img.width+bleedingX-1);
     coord.y = constrain(coord.y, bleedingY, img.height+bleedingY-1);
   }
+}
+
+
+
+// bubble functions
+void drawBubbles()
+{
+  for (int i = 0; i < bubbles.size(); i++)
+    bubbles.get(i).onDraw();  
+}
+// instantiate one bubble
+Bubble setBubble(int x, int y)
+{
+  // border limits
+  if (x < bleedingX || x > bleedingX+img.width) return null;
+  if (y < bleedingY || y > bleedingY+img.height) return null;
+  
+  
+  if (bubbles.size() < 512)
+  {
+    Bubble bubble = new Bubble(
+      x + round(random(-1, 1)),
+      y + round(random(-1, 1)),
+      scale, img, canvas, TTL);
+    bubbles.add(bubble);
+    bubble.parent = bubbles;
+    return bubble;
+  }
+  else
+    return null;
+}
+// set a cluster of bubbles
+void setCluster(int x, int y)
+{
+  for (int i = 0; i < 64; i++)
+    setBubble(x, y);
+}
+// blow away bubbles
+void blowFrom(int x, int y)
+{
+  for (int i = 0; i < bubbles.size(); i++)
+    bubbles.get(i).blowFrom(x, y);
 }

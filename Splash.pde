@@ -1,3 +1,7 @@
+//
+//
+//
+// single object splash
 class Splash
 {
   int x, y;

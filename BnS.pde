@@ -1,16 +1,17 @@
+// imports
+import controlP5.*;
+
+
+
 // global fields
 String imgPath = "data/original";
 PImage img;
 PGraphics canvas;
-ArrayList<Bubble> bubbles;
-GUI gui;
-int bleedingX = 50;
-int bleedingY = 50;
-int scale = 8;
+color strokeColor = 0xff363532;
 
 
 
-// main loop
+// main thread
 void settings()
 {
   // need to cover the whole screen first
@@ -19,45 +20,40 @@ void settings()
 }
 void setup()
 {
-  stroke(0xff363532);
-  strokeWeight(2);
+  // brush setup
   ellipseMode(RADIUS);
+  strokeWeight(2);
+  stroke(strokeColor);
   
+  // init of fields
   if (!tryLoadImage())
   {
     exit(); return;
   };
-  canvas = newCanvas();
   bubbles = new ArrayList<Bubble>();
+  canvas = newCanvas();
   gui = new GUI(this).init();
   
-  bleedingY += constrain((600-img.height)/2, 0, 300);
+  // deal with too-small original image
+  bleedingY += max((600-img.height)/2, 0);
+  // de facto size()
   windowResize(img.width+2*bleedingX+gui.columnWidth, img.height+2*bleedingY);
 }
 void draw()
 {
-  background(darkMode ? 0xff1d1d1f : 0xfff5f5f7);
-  tint(0xff, imageAlpha);
-  image(img, bleedingX, bleedingY);
-  tint(0xff);
-  if (autoBlur)
-    tryBlurCanvas(canvas);
-  image(canvas, 0, 0);
-  
   if (mousePressed && mouseButton == LEFT)
     setBubble(mouseX, mouseY);
-  
-  for (int i = 0; i < bubbles.size(); i++)
-    bubbles.get(i).onDraw();
-    
-  stroke(0xff363532);
-  noFill();
-  ellipse(mouseX, mouseY, scale * 3, scale * 3);
+
+  drawBackground();
+  drawOriginal();
+  drawCanvas();  
+  drawBubbles();
+  drawCursor();
 }
 
 
 
-// messages
+// input messages
 void keyPressed()
 {
   if (key == ' ')
@@ -69,7 +65,7 @@ void mousePressed()
 {
   if (mouseButton == RIGHT)
   {
-    blowAll();
+    blowFrom(mouseX, mouseY);
   }
 }
 void mouseWheel(MouseEvent event)
@@ -91,35 +87,19 @@ boolean tryLoadImage()
   }
   return false;
 }
-// blow away bubbles
-void blowAll()
+void drawBackground()
 {
-  for (int i = 0; i < bubbles.size(); i++)
-    bubbles.get(i).blowFrom(mouseX, mouseY);
+  background(darkMode ? 0xff1d1d1f : 0xfff5f5f7);  
 }
-Bubble setBubble(int x, int y)
+void drawOriginal()
 {
-  // border limits
-  if (x < bleedingX || x > bleedingX+img.width) return null;
-  if (y < bleedingY || y > bleedingY+img.height) return null;
-  
-  
-  if (bubbles.size() < 512)
-  {
-    Bubble bubble = new Bubble(
-      x + round(random(-1, 1)),
-      y + round(random(-1, 1)),
-      scale, img, canvas, TTL);
-    bubbles.add(bubble);
-    bubble.parent = bubbles;
-    return bubble;
-  }
-  else
-    return null;
+  tint(0xff, imageAlpha);
+  image(img, bleedingX, bleedingY);
+  tint(0xff);
 }
-// set a cluster of bubbles
-void setCluster(int x, int y)
+void drawCursor()
 {
-  for (int i = 0; i < 64; i++)
-    setBubble(x, y);
+  stroke(strokeColor);
+  noFill();
+  ellipse(mouseX, mouseY, scale * 3, scale * 3);
 }

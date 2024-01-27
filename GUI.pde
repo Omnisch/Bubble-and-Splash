@@ -1,4 +1,12 @@
-import controlP5.*;
+//
+//
+//
+// GUI fields
+GUI gui;
+int bleedingX = 50;
+int bleedingY = 50;
+
+
 
 // GUI variables
 int TTL;
@@ -12,6 +20,7 @@ boolean darkMode;
 
 
 
+// packaged GUI part
 class GUI
 {
   ControlP5 cp;
@@ -126,7 +135,7 @@ class GUI
 
 
 
-// messages
+// GUI messages
 void controlEvent(ControlEvent event)
 {
   if (gui == null) return;
