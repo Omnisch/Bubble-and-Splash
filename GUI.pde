@@ -59,8 +59,6 @@ class GUI
       cp.addSlider("gravity")
         .setSize(200, 20)
         .setRange(0, 3)
-        .setNumberOfTickMarks(7)
-        .showTickMarks(false)
         .setValue(0)
       ,true);
     
@@ -105,7 +103,7 @@ class GUI
     arrangeControllers(
       cp.addButton("saveFrame")
         .setSize(200, 20)
-      ,false).getCaptionLabel().setText("save  current  frame").setColor(0xff);
+      ,false).getCaptionLabel().setText("save  photo").setColor(0xff);
     
     return this;
   }

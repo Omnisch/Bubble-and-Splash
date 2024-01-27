@@ -27,11 +27,11 @@ void setup()
   {
     exit(); return;
   };
-  bleedingY += constrain((600-img.height)/2, 0, 300);
   canvas = newCanvas();
   balloons = new ArrayList<Balloon>();
   gui = new GUI(this).init();
   
+  bleedingY += constrain((600-img.height)/2, 0, 300);
   windowResize(img.width+2*bleedingX+gui.columnWidth, img.height+2*bleedingY);
 }
 void draw()
@@ -44,7 +44,7 @@ void draw()
     tryBlurCanvas(canvas);
   image(canvas, 0, 0);
   
-  if (mousePressed)
+  if (mousePressed && mouseButton == LEFT)
     setBalloon(mouseX, mouseY);
   
   for (int i = 0; i < balloons.size(); i++)
@@ -60,14 +60,16 @@ void draw()
 // messages
 void keyPressed()
 {
-  switch (key)
+  if (key == ' ')
   {
-    // set a cluster
-    case ' ':
-      setCluster(mouseX, mouseY); break;
-    // blow away balloons
-    case 'b':
-      blowAll(); break;
+    setCluster(mouseX, mouseY);
+  }
+}
+void mousePressed()
+{
+  if (mouseButton == RIGHT)
+  {
+    blowAll();
   }
 }
 void mouseWheel(MouseEvent event)
@@ -89,6 +91,7 @@ boolean tryLoadImage()
   }
   return false;
 }
+// blow away balloons
 void blowAll()
 {
   for (int i = 0; i < balloons.size(); i++)
@@ -114,6 +117,7 @@ Balloon setBalloon(int x, int y)
   else
     return null;
 }
+// set a cluster of balloons
 void setCluster(int x, int y)
 {
   for (int i = 0; i < 64; i++)
