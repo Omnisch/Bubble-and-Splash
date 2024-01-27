@@ -41,13 +41,16 @@ void blurCanvas(PGraphics canvas)
   canvas.image(blurred, 0, 0);
   canvas.endDraw();
 }
-void tryBlurCanvas(PGraphics canvas)
+boolean tryBlurCanvas(PGraphics canvas)
 {
   if (++blurLoopTick > 256)
   {
     blurLoopTick = 0;
     blurCanvas(canvas);
+    return true;
   }
+  else
+    return false;
 }
 void drawCanvas()
 {

@@ -40,8 +40,8 @@ class Bubble
     calcPos();
     
     int pixel = img.pixels[(int)coord.x-bleedingX + (int)(coord.y-bleedingY)*img.width];
-    //int fade = (int)map(TTL, initTTL, 0, 0x0, 0xff);
-    //fill(pixel & ((fade << 24) + 0xffffff));
+    int fade = (int)map(TTL, initTTL, 0, 0x0, 0xff);
+    fill(pixel & ((fade << 24) + 0xffffff));
     {
       int grayValue =
         (int)((pixel >> 16 & 0xff) * 0.299) +
@@ -73,6 +73,17 @@ class Bubble
   {
     if (TTL == 0) poke();
     if (TTL >= 0) TTL--;
+  }
+  boolean tryPokeFrom(int x, int y)
+  {
+    PVector fromVector = new PVector(x, y);
+    if (PVector.dist(coord, fromVector) < radius)
+    {
+      poke();
+      return true;
+    }
+    else
+      return false;
   }
   void poke()
   {
@@ -124,7 +135,7 @@ class Bubble
       addForce(PVector.mult(PVector.sub
         (new PVector(coord.x, bleedingY+radius), coord).normalize(), mass));
   }
-  void blowFrom(float x, float y)
+  void blowFrom(int x, int y)
   {
     PVector fromVector = new PVector(x, y);
     PVector direction = PVector.sub(coord, fromVector).normalize();
@@ -210,4 +221,14 @@ void blowFrom(int x, int y)
 {
   for (int i = 0; i < bubbles.size(); i++)
     bubbles.get(i).blowFrom(x, y);
+}
+// poke the bubble under cursor
+boolean tryPokeFrom(int x, int y)
+{
+  for (int i = 0; i < bubbles.size(); i++)
+  {
+    if (bubbles.get(i).tryPokeFrom(x, y))
+      return true;
+  }
+  return false;
 }

@@ -65,7 +65,8 @@ void mousePressed()
 {
   if (mouseButton == RIGHT)
   {
-    blowFrom(mouseX, mouseY);
+    //blowFrom(mouseX, mouseY);
+    tryPokeFrom(mouseX, mouseY);
   }
 }
 void mouseWheel(MouseEvent event)
