@@ -1,3 +1,6 @@
+// Processing 4.3 & ControlP5
+// designed and programmed by Omnistudio @2023
+//
 // imports
 import controlP5.*;
 

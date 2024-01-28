@@ -155,9 +155,10 @@ void pokeAll()
 {
   for (int i = 0; i < chunks.size(); i++)
   {
-    for (int j = 0; j < chunks.get(i).size(); j++)
+    // poke() lets the size of the ArrayList minus 1
+    while (chunks.get(i).size() > 0)
     {
-      chunks.get(i).get(j).poke();
+      chunks.get(i).get(0).poke();
     }
   }
 }
