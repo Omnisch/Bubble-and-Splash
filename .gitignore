@@ -1,2 +1,6 @@
+!original.*
+*.jpg
+*.png
+*.gif
 *.tif
 windows-amd64
