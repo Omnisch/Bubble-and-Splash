@@ -39,7 +39,7 @@ class Splash
       //  0.3*size * constrain((particleCount-i) + random(-3,4), 1, size) / particleCount :
       //  size * constrain((particleCount-i) + random(-3,4), 1, size) / particleCount);
       canvas.stroke(colour & 0x80ffffff);
-      canvas.point(centerX, centerY);
+      canvas.point(bleedingX+centerX, bleedingY+centerY);
     }
     canvas.endDraw();
   }

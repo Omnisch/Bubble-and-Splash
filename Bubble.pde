@@ -36,11 +36,12 @@ class Bubble
   
   void onDraw()
   {
+    updateParentChunk();
     calcAcc();
     calcVel();
     calcPos();
     
-    int pixel = img.pixels[(int)coord.x-bleedingX + (int)(coord.y-bleedingY)*img.width];
+    int pixel = img.pixels[(int)coord.x + (int)coord.y*img.width];
     int fade = (int)map(TTL, initTTL, 0, 0x0, 0xff);
     fill(pixel & ((fade << 24) + 0xffffff));
     {
@@ -58,14 +59,14 @@ class Bubble
         stroke(0xff363532);
       fill(lerpColor(color(grayValue), pixel, grayScale));
     }
-    ellipse(coord.x, coord.y, radius, radius);
+    ellipse(bleedingX+coord.x, bleedingY+coord.y, radius, radius);
     
     // highlight
     if (highlight)
     {
       noStroke();
       fill(0xddffffff);
-      ellipse(coord.x-radius/3, coord.y-radius/3, radius/3, radius/3);
+      ellipse(bleedingX+coord.x-radius/3, bleedingY+coord.y-radius/3, radius/3, radius/3);
     }
     
     TTLCheck();
@@ -74,6 +75,15 @@ class Bubble
   {
     if (TTL == 0) poke();
     if (TTL >= 0) TTL--;
+  }
+  void updateParentChunk()
+  {
+    if (parent != getChunkByPixel((int)coord.x, (int)coord.y))
+    {
+      parent.remove(this);
+      parent = getChunkByPixel((int)coord.x, (int)coord.y);
+      parent.add(this);
+    }
   }
   boolean tryPokeFrom(int x, int y)
   {
@@ -90,7 +100,7 @@ class Bubble
   {
     Splash corpse = new Splash(
       (int)coord.x, (int)coord.y, radius*1.2, vel,
-      img.pixels[(int)coord.x-bleedingX + (int)(coord.y-bleedingY)*img.width], canvas);
+      img.pixels[(int)coord.x + (int)coord.y*img.width], canvas);
     corpse.onDraw();
     //canvas.fill(img.pixels[(int)coord.x + (int)coord.y*img.width] & 0x80ffffff);
     //canvas.ellipse(coord.x, coord.y, radius, radius);
@@ -104,37 +114,43 @@ class Bubble
   void collisionTest()
   {
     // collision force
-    for (int i = 0; i < parent.size(); i++)
+    ArrayList<ArrayList<Bubble>> adjacentChunks =
+      get3x3ChunksByPixel((int)coord.x, (int)coord.y);
+    for (int i = 0; i < adjacentChunks.size(); i++)
     {
-      Bubble target = parent.get(i);
-      if (target == this) continue;
-      
-      float dist = PVector.dist(coord, target.coord);
-      float collideLength = (radius + target.radius) - dist;
-      if (collideLength > 0)
+      for (int j = 0; j < adjacentChunks.get(i).size(); j++)
       {
-        addForce(
-          PVector.mult(
-            PVector.sub(coord, target.coord).normalize(),
-            target.mass
-          )
-        );
+        Bubble target = adjacentChunks.get(i).get(j);
+        if (target == this) continue;
+        
+        float dist = PVector.dist(coord, target.coord);
+        float collideLength = (radius + target.radius) - dist;
+        println(++collisionTestCount);
+        if (collideLength > 0)
+        {
+          addForce(
+            PVector.mult(
+              PVector.sub(coord, target.coord).normalize(),
+              target.mass
+            )
+          );
+        }
       }
     }
     
     // border
-    if (coord.x+radius >= img.width + bleedingX)
+    if (coord.x+radius >= img.width)
       addForce(PVector.mult(PVector.sub
-        (new PVector(img.width+bleedingX-radius, coord.y), coord).normalize(), mass));
-    if (coord.x-radius < bleedingX)
+        (new PVector(img.width-radius, coord.y), coord).normalize(), mass));
+    if (coord.x-radius < 0)
       addForce(PVector.mult(PVector.sub
-        (new PVector(bleedingX+radius, coord.y), coord).normalize(), mass));
-    if (coord.y+radius >= img.height + bleedingY)
+        (new PVector(radius, coord.y), coord).normalize(), mass));
+    if (coord.y+radius >= img.height)
       addForce(PVector.mult(PVector.sub
-        (new PVector(coord.x, img.height+bleedingY-radius), coord).normalize(), mass));
-    if (coord.y-radius < bleedingY)
+        (new PVector(coord.x, img.height-radius), coord).normalize(), mass));
+    if (coord.y-radius < 0)
       addForce(PVector.mult(PVector.sub
-        (new PVector(coord.x, bleedingY+radius), coord).normalize(), mass));
+        (new PVector(coord.x, radius), coord).normalize(), mass));
   }
   void blowFrom(int x, int y)
   {
@@ -177,8 +193,8 @@ class Bubble
   void setCoord(PVector v)
   {
     coord = v;
-    coord.x = constrain(coord.x, bleedingX, img.width+bleedingX-1);
-    coord.y = constrain(coord.y, bleedingY, img.height+bleedingY-1);
+    coord.x = constrain(coord.x, 0, img.width-1);
+    coord.y = constrain(coord.y, 0, img.height-1);
   }
 }
 
@@ -202,19 +218,17 @@ Bubble setBubble(int x, int y)
   if (x < bleedingX || x > bleedingX+img.width) return null;
   if (y < bleedingY || y > bleedingY+img.height) return null;
   
+  // canvas coord to image coord
+  x -= bleedingX;
+  y -= bleedingY;
   
-  //if (bubbles.size() < 512)
-  {
-    Bubble bubble = new Bubble(
-      x + round(random(-1, 1)),
-      y + round(random(-1, 1)),
-      scale, img, splashed, TTL);
-    getChunkByPixel(x, y).add(bubble);
-    bubble.parent = getChunkByPixel(x, y);
-    return bubble;
-  }
-  //else
-  //  return null;
+  Bubble bubble = new Bubble(
+    x + round(random(-1, 1)),
+    y + round(random(-1, 1)),
+    scale, img, splashed, TTL);
+  getChunkByPixel(x, y).add(bubble);
+  bubble.parent = getChunkByPixel(x, y);
+  return bubble;
 }
 // set a cluster of bubbles
 void setCluster(int x, int y)

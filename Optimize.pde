@@ -5,6 +5,7 @@
 // to find adjacent bubble
 ArrayList<ArrayList<Bubble>> chunks;
 int xCount, yCount;
+long collisionTestCount = 0;
 
 
 
@@ -29,23 +30,28 @@ void initChunks()
 
 ArrayList<Bubble> getChunkByCount(int x, int y)
 {
-  println("select: chunk(" + x + ", " + y + ")");
+  //println("select: chunk(" + x + ", " + y + ")");
   return chunks.get(x*yCount + y);
 }
 ArrayList<Bubble> getChunkByPixel(int x, int y)
 {
+  //println("select: chunk(" + x/(8*maxScale) + ", " + y/(8*maxScale) + ")");
   return getChunkByCount(x/(8*maxScale), y/(8*maxScale));
 }
 
 
 
-ArrayList<ArrayList<Bubble>> get2x2AdjacentChunksByPixel(int x, int y)
+ArrayList<ArrayList<Bubble>> get2x2ChunksByPixel(int x, int y)
 {
   return null;
 }
-ArrayList<ArrayList<Bubble>> get3x3AdjacentChunksByPixel(int x, int y)
+ArrayList<ArrayList<Bubble>> get3x3ChunksByPixel(int x, int y)
 {
   ArrayList<ArrayList<Bubble>> result = new ArrayList<ArrayList<Bubble>>();
+  
+  // canvas coord to image coord
+  x -= bleedingX;
+  y -= bleedingY;
   
   int xCurr = x / (8*maxScale);
   int yCurr = y / (8*maxScale);

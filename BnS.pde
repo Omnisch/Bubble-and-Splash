@@ -46,8 +46,8 @@ void setup()
 }
 void draw()
 {
-  //if (mousePressed && mouseButton == LEFT)
-  //  setBubble(mouseX, mouseY);
+  if (mousePressed && mouseButton == LEFT)
+    setBubble(mouseX, mouseY);
 
   drawBackground();
   drawOriginal();
@@ -70,8 +70,8 @@ void keyPressed()
 }
 void mousePressed()
 {
-  if (mouseButton == LEFT)
-    setBubble(mouseX, mouseY);
+  //if (mouseButton == LEFT)
+  //  setBubble(mouseX, mouseY);
   if (mouseButton == RIGHT)
     tryPokeFrom(mouseX, mouseY);
   if (mouseButton == CENTER)
