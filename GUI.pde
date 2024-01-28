@@ -5,6 +5,7 @@
 GUI gui;
 int bleedingX = 50;
 int bleedingY = 50;
+int guiColumnWidth = 260;
 
 
 
@@ -26,7 +27,6 @@ class GUI
   ControlP5 cp;
   Slider TTLSlider;
   Slider gravitySlider;
-  int columnWidth = 260;
   
   GUI(processing.core.PApplet theParent)
   {
