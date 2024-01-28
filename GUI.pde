@@ -148,7 +148,7 @@ void controlEvent(ControlEvent event)
 // called by button clearCanvas
 void clearCanvas()
 {
-  canvas = newCanvas();
+  splashed = newCanvas();
 }
 // called by button pokeAll
 void pokeAll()

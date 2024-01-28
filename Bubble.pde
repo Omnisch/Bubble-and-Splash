@@ -4,6 +4,7 @@
 // bubble fields
 ArrayList<Bubble> bubbles;
 int scale = 8;
+int minScale = 2, maxScale = 16;
 
 
 
@@ -24,7 +25,7 @@ class Bubble
   {
     this.vel = new PVector();
     this.acc = new PVector();
-    this.radius = random(scale, scale * 3);
+    this.radius = random(scale, scale * 4);
     this.mass = radius * radius;
     this.img = img;
     this.canvas = canvas;
@@ -202,7 +203,7 @@ Bubble setBubble(int x, int y)
     Bubble bubble = new Bubble(
       x + round(random(-1, 1)),
       y + round(random(-1, 1)),
-      scale, img, canvas, TTL);
+      scale, img, splashed, TTL);
     bubbles.add(bubble);
     bubble.parent = bubbles;
     return bubble;

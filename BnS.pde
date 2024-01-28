@@ -6,7 +6,8 @@ import controlP5.*;
 // global fields
 String imgPath = "data/original";
 PImage img;
-PGraphics canvas;
+PGraphics splashed;
+PGraphics debugLayer;
 color strokeColor = 0xff363532;
 
 
@@ -31,7 +32,9 @@ void setup()
     exit(); return;
   };
   bubbles = new ArrayList<Bubble>();
-  canvas = newCanvas();
+  splashed = newCanvas();
+  debugLayer = newCanvas();
+  drawAssistantGrid(debugLayer);
   gui = new GUI(this).init();
   
   // deal with too-small original image
@@ -41,12 +44,14 @@ void setup()
 }
 void draw()
 {
-  if (mousePressed && mouseButton == LEFT)
-    setBubble(mouseX, mouseY);
+  //if (mousePressed && mouseButton == LEFT)
+  //  setBubble(mouseX, mouseY);
 
   drawBackground();
   drawOriginal();
-  drawCanvas();  
+  tryBlurCanvas(splashed);
+  drawCanvas(splashed);
+  drawCanvas(debugLayer);
   drawBubbles();
   drawCursor();
 }
@@ -63,6 +68,8 @@ void keyPressed()
 }
 void mousePressed()
 {
+  if (mouseButton == LEFT)
+    setBubble(mouseX, mouseY);
   if (mouseButton == RIGHT)
   {
     tryPokeFrom(mouseX, mouseY);
@@ -75,7 +82,7 @@ void mousePressed()
 void mouseWheel(MouseEvent event)
 {
   scale += -event.getCount();
-  scale = constrain(scale, 2, 16);
+  scale = constrain(scale, minScale, maxScale);
 }
 
 
@@ -105,5 +112,5 @@ void drawCursor()
 {
   stroke(strokeColor);
   noFill();
-  ellipse(mouseX, mouseY, scale * 3, scale * 3);
+  ellipse(mouseX, mouseY, scale * 4, scale * 4);
 }
