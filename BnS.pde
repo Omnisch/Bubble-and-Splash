@@ -15,14 +15,11 @@ color strokeColor = 0xff363532;
 // main thread
 void settings()
 {
-  // init of fields
   if (!tryLoadImage())
   {
     exit(); return;
   };
   
-  // need to cover the whole screen first
-  // so that controlP5 won't do culling
   size(img.width+2*bleedingX+guiColumnWidth, img.height+2*bleedingY);
 }
 void setup()
@@ -32,6 +29,7 @@ void setup()
   strokeWeight(2);
   stroke(strokeColor);
   
+  // init of fields
   initChunks();
   splashed = newCanvas();
   gui = new GUI(this).init();

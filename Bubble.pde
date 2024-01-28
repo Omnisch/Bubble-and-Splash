@@ -76,6 +76,9 @@ class Bubble
   }
   void updateParentChunk()
   {
+    // do update in every 4 frames
+    if ((TTL & 3) == 0) return;
+    
     if (parent != getChunkByPixel((int)coord.x, (int)coord.y))
     {
       parent.remove(this);
