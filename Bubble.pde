@@ -2,8 +2,7 @@
 //
 //
 // bubble fields
-ArrayList<Bubble> bubbles;
-int scale = 8;
+int scale = 7;
 int minScale = 2, maxScale = 16;
 
 
@@ -36,7 +35,6 @@ class Bubble
   
   void onDraw()
   {
-    updateParentChunk();
     calcAcc();
     calcVel();
     calcPos();
@@ -125,7 +123,6 @@ class Bubble
         
         float dist = PVector.dist(coord, target.coord);
         float collideLength = (radius + target.radius) - dist;
-        println(++collisionTestCount);
         if (collideLength > 0)
         {
           addForce(
@@ -207,6 +204,13 @@ void drawBubbles()
   {
     for (int j = 0; j < chunks.get(i).size(); j++)
     {
+      chunks.get(i).get(j).updateParentChunk();
+    }
+  }
+  for (int i = 0; i < chunks.size(); i++)
+  {
+    for (int j = 0; j < chunks.get(i).size(); j++)
+    {
       chunks.get(i).get(j).onDraw();
     }
   }
@@ -239,16 +243,33 @@ void setCluster(int x, int y)
 // blow away bubbles
 void blowFrom(int x, int y)
 {
-  for (int i = 0; i < bubbles.size(); i++)
-    bubbles.get(i).blowFrom(x, y);
+  // canvas coord to image coord
+  x -= bleedingX;
+  y -= bleedingY;
+  
+  for (int i = 0; i < chunks.size(); i++)
+  {
+    for (int j = 0; j < chunks.get(i).size(); j++)
+    {
+      chunks.get(i).get(j).blowFrom(x, y);
+    }
+  }
 }
 // poke the bubble under cursor
 boolean tryPokeFrom(int x, int y)
 {
-  for (int i = 0; i < bubbles.size(); i++)
+  // canvas coord to image coord
+  x -= bleedingX;
+  y -= bleedingY;
+  
+  ArrayList<ArrayList<Bubble>> adjacentChunks =
+    get3x3ChunksByPixel(x, y);
+  for (int i = 0; i < adjacentChunks.size(); i++)
   {
-    if (bubbles.get(i).tryPokeFrom(x, y))
-      return true;
+    for (int j = 0; j < adjacentChunks.get(i).size(); j++)
+    {
+      adjacentChunks.get(i).get(j).tryPokeFrom(x, y);
+    }
   }
   return false;
 }

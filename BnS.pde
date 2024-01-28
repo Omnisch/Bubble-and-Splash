@@ -31,12 +31,8 @@ void setup()
   {
     exit(); return;
   };
-  {
-    initChunks();
-  }
+  initChunks();
   splashed = newCanvas();
-  debugLayer = newCanvas();
-  drawAssistantGrid(debugLayer);
   gui = new GUI(this).init();
   
   // deal with too-small original image
@@ -53,7 +49,6 @@ void draw()
   drawOriginal();
   tryBlurCanvas(splashed);
   drawCanvas(splashed);
-  drawCanvas(debugLayer);
   drawBubbles();
   drawCursor();
 }
@@ -70,8 +65,6 @@ void keyPressed()
 }
 void mousePressed()
 {
-  //if (mouseButton == LEFT)
-  //  setBubble(mouseX, mouseY);
   if (mouseButton == RIGHT)
     tryPokeFrom(mouseX, mouseY);
   if (mouseButton == CENTER)

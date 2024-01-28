@@ -5,7 +5,6 @@
 // to find adjacent bubble
 ArrayList<ArrayList<Bubble>> chunks;
 int xCount, yCount;
-long collisionTestCount = 0;
 
 
 
@@ -30,12 +29,10 @@ void initChunks()
 
 ArrayList<Bubble> getChunkByCount(int x, int y)
 {
-  //println("select: chunk(" + x + ", " + y + ")");
   return chunks.get(x*yCount + y);
 }
 ArrayList<Bubble> getChunkByPixel(int x, int y)
 {
-  //println("select: chunk(" + x/(8*maxScale) + ", " + y/(8*maxScale) + ")");
   return getChunkByCount(x/(8*maxScale), y/(8*maxScale));
 }
 

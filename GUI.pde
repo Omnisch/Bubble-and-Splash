@@ -153,8 +153,13 @@ void clearCanvas()
 // called by button pokeAll
 void pokeAll()
 {
-  for (int i = bubbles.size() - 1; i >= 0; i--)
-    bubbles.get(i).poke();
+  for (int i = 0; i < chunks.size(); i++)
+  {
+    for (int j = 0; j < chunks.get(i).size(); j++)
+    {
+      chunks.get(i).get(j).poke();
+    }
+  }
 }
 // called by slider TTL
 void checkTTLEdge()
