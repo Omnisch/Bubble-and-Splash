@@ -187,8 +187,13 @@ class Bubble
 // bubble functions
 void drawBubbles()
 {
-  for (int i = 0; i < bubbles.size(); i++)
-    bubbles.get(i).onDraw();  
+  for (int i = 0; i < chunks.size(); i++)
+  {
+    for (int j = 0; j < chunks.get(i).size(); j++)
+    {
+      chunks.get(i).get(j).onDraw();
+    }
+  }
 }
 // instantiate one bubble
 Bubble setBubble(int x, int y)
@@ -198,18 +203,18 @@ Bubble setBubble(int x, int y)
   if (y < bleedingY || y > bleedingY+img.height) return null;
   
   
-  if (bubbles.size() < 512)
+  //if (bubbles.size() < 512)
   {
     Bubble bubble = new Bubble(
       x + round(random(-1, 1)),
       y + round(random(-1, 1)),
       scale, img, splashed, TTL);
-    bubbles.add(bubble);
-    bubble.parent = bubbles;
+    getChunkByPixel(x, y).add(bubble);
+    bubble.parent = getChunkByPixel(x, y);
     return bubble;
   }
-  else
-    return null;
+  //else
+  //  return null;
 }
 // set a cluster of bubbles
 void setCluster(int x, int y)

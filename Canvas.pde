@@ -54,9 +54,25 @@ boolean tryBlurCanvas(PGraphics canvas)
   else
     return false;
 }
-void drawCanvas(PGraphics canvas)
+void drawCanvas(PGraphics toDraw)
 {
-  image(canvas, 0, 0);
+  image(toDraw, 0, 0);
+}
+void drawBackground()
+{
+  background(darkMode ? 0xff1d1d1f : 0xfff5f5f7);
+}
+void drawOriginal()
+{
+  tint(0xff, imageAlpha);
+  image(img, bleedingX, bleedingY);
+  tint(0xff);
+}
+void drawCursor()
+{
+  stroke(strokeColor);
+  noFill();
+  ellipse(mouseX, mouseY, scale * 4, scale * 4);
 }
 // no need to call in draw()
 void drawAssistantGrid(PGraphics canvas)

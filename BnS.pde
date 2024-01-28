@@ -31,7 +31,9 @@ void setup()
   {
     exit(); return;
   };
-  bubbles = new ArrayList<Bubble>();
+  {
+    initChunks();
+  }
   splashed = newCanvas();
   debugLayer = newCanvas();
   drawAssistantGrid(debugLayer);
@@ -71,13 +73,9 @@ void mousePressed()
   if (mouseButton == LEFT)
     setBubble(mouseX, mouseY);
   if (mouseButton == RIGHT)
-  {
     tryPokeFrom(mouseX, mouseY);
-  }
   if (mouseButton == CENTER)
-  {
     blowFrom(mouseX, mouseY);
-  }
 }
 void mouseWheel(MouseEvent event)
 {
@@ -97,20 +95,4 @@ boolean tryLoadImage()
     if (img != null) return true;
   }
   return false;
-}
-void drawBackground()
-{
-  background(darkMode ? 0xff1d1d1f : 0xfff5f5f7);  
-}
-void drawOriginal()
-{
-  tint(0xff, imageAlpha);
-  image(img, bleedingX, bleedingY);
-  tint(0xff);
-}
-void drawCursor()
-{
-  stroke(strokeColor);
-  noFill();
-  ellipse(mouseX, mouseY, scale * 4, scale * 4);
 }
