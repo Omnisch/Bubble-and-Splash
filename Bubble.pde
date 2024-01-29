@@ -47,7 +47,7 @@ class Bubble
     // translucent or grayscaled
     if (translucent)
     {
-      int fade = (int)map(TTL, initTTL+2, 0, 0x0, 0xff);
+      int fade = (int)map(TTL, initTTL, 0, 0x0, 0xff);
       canvas.fill(pixel & ((fade << 24) + 0xffffff));
     }
     else
@@ -76,7 +76,7 @@ class Bubble
   {
     if (canvas != g) canvas.beginDraw();
     canvas.noStroke();
-    canvas.fill(0xddffffff);
+    canvas.fill(0xd0ffffff);
     canvas.ellipse(bleedingX+coord.x-radius/3, bleedingY+coord.y-radius/3, radius/3, radius/3);
     if (canvas != g) canvas.endDraw();
   }
@@ -86,11 +86,8 @@ class Bubble
   // update and sub-functions
   void updateData()
   {
+    updateParentChunk();
     updateTTL();
-    
-    // update parent in every 4 frames
-    if ((TTL & 3) == 0)
-      updateParentChunk();
   }
   void updateTTL()
   {
