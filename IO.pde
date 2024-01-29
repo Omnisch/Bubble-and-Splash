@@ -1,7 +1,7 @@
 //
 //
 //
-// io fields
+// IO fields
 String imgPath = "data/original";
 PImage img;
 PGraphics output;

@@ -35,9 +35,6 @@ ArrayList<Bubble> getChunkByPixel(int x, int y)
 {
   return getChunkByCount(x/(8*maxScale), y/(8*maxScale));
 }
-
-
-
 ArrayList<ArrayList<Bubble>> get3x3ChunksByPixel(int x, int y)
 {
   ArrayList<ArrayList<Bubble>> result = new ArrayList<ArrayList<Bubble>>();

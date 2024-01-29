@@ -1,23 +1,22 @@
 // Processing 4.3 & ControlP5
 // designed and programmed by Omnistudio @2023
 //
-// imports
 import controlP5.*;
 
 
-
-// main thread
 void settings()
 {
   if (!tryLoadImage())
   {
     exit(); return;
   }
-  
   // deal with too-small original image
+  bleedingX += max((600-img.width)/2, 0);
   bleedingY += max((600-img.height)/2, 0);
   size(img.width+2*bleedingX+guiColumnWidth, img.height+2*bleedingY);
 }
+
+
 void setup()
 {
   // canvas setup
@@ -29,18 +28,17 @@ void setup()
   splashed = newCanvas(canvasWidth, canvasHeight);
   output = newCanvas(canvasWidth, canvasHeight);
   gizmos = newCanvas(canvasWidth, canvasHeight);
-  
   // chunk setup
   initChunks();
-  
   // gui setup
   gui = new GUI(this).init();
 }
+
+
 void draw()
 {
   if (mousePressed && mouseButton == LEFT)
     setBubble(mouseX, mouseY);
-  
   // background
   drawBackground(g);
   drawOriginal(g);
@@ -48,6 +46,7 @@ void draw()
   tryBlurCanvas(splashed);
   drawCanvas(g, splashed);
   // bubbles
+  updateBubbles();
   drawBubbles(g);
   // gizmos
   gizmos.clear();

@@ -33,15 +33,24 @@ class Bubble
     this.TTL = this.initTTL = TTL;
   }
   
+  
+  
+  // draw and sub-functions
   void onDraw(PGraphics canvas)
   {
     calcAcc();
     calcVel();
     calcPos();
     
+    if (canvas != g) canvas.beginDraw();
     int pixel = img.pixels[(int)coord.x + (int)coord.y*img.width];
-    int fade = (int)map(TTL, initTTL, 0, 0x0, 0xff);
-    canvas.fill(pixel & ((fade << 24) + 0xffffff));
+    // translucent or grayscaled
+    if (translucent)
+    {
+      int fade = (int)map(TTL, initTTL+2, 0, 0x0, 0xff);
+      canvas.fill(pixel & ((fade << 24) + 0xffffff));
+    }
+    else
     {
       int grayValue =
         (int)((pixel >> 16 & 0xff) * 0.299) +
@@ -50,40 +59,46 @@ class Bubble
       // initTTL+2 to ensure when TTL==-1(infinity)
       // the bubble is colored
       float grayScale = map(TTL, initTTL+2, 0, 0, 1);
-      // stroke
-      if (hideStroke)
-        canvas.noStroke();
-      else
-        canvas.stroke(0xff363532);
       canvas.fill(lerpColor(color(grayValue), pixel, grayScale));
     }
-    // fundamental draw
-    if (canvas != g) canvas.beginDraw();
+    // stroke
+    if (hideStroke)
+      canvas.noStroke();
+    else
+      canvas.stroke(0xff363532);
+    // draw bubble
     canvas.ellipse(bleedingX+coord.x, bleedingY+coord.y, radius, radius);
     if (canvas != g) canvas.endDraw();
-    
     // highlight
-    if (highlight)
-    {
-      canvas.noStroke();
-      canvas.fill(0xddffffff);
-      if (canvas != g) canvas.beginDraw();
-      canvas.ellipse(bleedingX+coord.x-radius/3, bleedingY+coord.y-radius/3, radius/3, radius/3);
-      if (canvas != g) canvas.endDraw();
-    }
-    
-    TTLCheck();
+    if (highlight) drawHighlight(canvas);
   }
-  void TTLCheck()
+  void drawHighlight(PGraphics canvas)
+  {
+    if (canvas != g) canvas.beginDraw();
+    canvas.noStroke();
+    canvas.fill(0xddffffff);
+    canvas.ellipse(bleedingX+coord.x-radius/3, bleedingY+coord.y-radius/3, radius/3, radius/3);
+    if (canvas != g) canvas.endDraw();
+  }
+  
+  
+  
+  // update and sub-functions
+  void updateData()
+  {
+    updateTTL();
+    
+    // update parent in every 4 frames
+    if ((TTL & 3) == 0)
+      updateParentChunk();
+  }
+  void updateTTL()
   {
     if (TTL == 0) poke();
     if (TTL >= 0) TTL--;
   }
   void updateParentChunk()
-  {
-    // do update in every 4 frames
-    if ((TTL & 3) != 0) return;
-    
+  {    
     if (parent != getChunkByPixel((int)coord.x, (int)coord.y))
     {
       parent.remove(this);
@@ -91,6 +106,10 @@ class Bubble
       parent.add(this);
     }
   }
+  
+  
+  
+  // poke operations
   boolean tryPokeFrom(int x, int y)
   {
     PVector fromVector = new PVector(x, y);
@@ -110,13 +129,12 @@ class Bubble
     corpse.onDraw();
     //canvas.fill(img.pixels[(int)coord.x + (int)coord.y*img.width] & 0x80ffffff);
     //canvas.ellipse(coord.x, coord.y, radius, radius);
-    
     if (parent != null) parent.remove(this);
   }
   
   
   
-  // physics calculation
+  // physical calculation
   void collisionTest()
   {
     // collision force
@@ -164,6 +182,10 @@ class Bubble
     addForce(direction.mult(8 * (img.height - PVector.dist(coord, fromVector))));
     calcVel();
   }
+  
+  
+  
+  // Newton's F-a-v-d system
   void addForce(float x, float y)
   {
     addForce(new PVector(x, y));
@@ -191,6 +213,8 @@ class Bubble
   }
   
   
+  
+  // coordination operations
   void setCoord(int x, int y)
   {
     setCoord(new PVector(x, y));
@@ -206,15 +230,18 @@ class Bubble
 
 
 // bubble functions
-void drawBubbles(PGraphics canvas)
+void updateBubbles()
 {
   for (int i = 0; i < chunks.size(); i++)
   {
     for (int j = 0; j < chunks.get(i).size(); j++)
     {
-      chunks.get(i).get(j).updateParentChunk();
+      chunks.get(i).get(j).updateData();
     }
   }
+}
+void drawBubbles(PGraphics canvas)
+{
   for (int i = 0; i < chunks.size(); i++)
   {
     for (int j = 0; j < chunks.get(i).size(); j++)

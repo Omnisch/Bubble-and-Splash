@@ -16,6 +16,7 @@ float fraction;
 float gravity;
 int imageAlpha;
 boolean autoBlur;
+boolean translucent;
 boolean hideStroke;
 boolean highlight;
 boolean darkMode;
@@ -86,6 +87,12 @@ class GUI
         .setSize(60, 20)
         .setValue(true)
       ,true).getCaptionLabel().setText("auto  blur");
+    
+    arrangeControllers(
+      cp.addToggle("translucent")
+        .setSize(60, 20)
+        .setValue(false)
+      ,true);
     
     // hide stroke
     arrangeControllers(
