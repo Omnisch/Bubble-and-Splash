@@ -123,12 +123,22 @@ class Bubble
   }
   void poke()
   {
-    Splash corpse = new Splash(
-      (int)coord.x, (int)coord.y, radius*1.2, vel,
-      img.pixels[(int)coord.x + (int)coord.y*img.width], canvasSplash);
-    corpse.onDraw();
-    //canvas.fill(img.pixels[(int)coord.x + (int)coord.y*img.width] & 0x80ffffff);
-    //canvas.ellipse(coord.x, coord.y, radius, radius);
+    if (rawSplash)
+    {
+      canvasSplash.beginDraw();
+      canvasSplash.stroke(img.pixels[(int)coord.x + (int)coord.y*img.width] & 0x80ffffff);
+      canvasSplash.strokeWeight(2*radius);
+      canvasSplash.point(bleedingX+coord.x, bleedingY+coord.y);
+      canvasSplash.endDraw();
+    }
+    else
+    {
+      Splash corpse = new Splash(
+        (int)coord.x, (int)coord.y, radius*1.2, vel,
+        img.pixels[(int)coord.x + (int)coord.y*img.width], canvasSplash);
+      corpse.onDraw();
+    }
+    // remove this and free storage
     if (parent != null) parent.remove(this);
   }
   

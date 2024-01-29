@@ -32,13 +32,13 @@ class Splash
         x + round(dither*random(-2,3) + (size * i / (float)particleCount) * dither*cos(angle));
       int centerY =
         y + round(dither*random(-2,3) + (size * i / (float)particleCount) * dither*sin(angle));
+      canvas.stroke(colour & 0x80ffffff);
       canvas.strokeWeight(size *
-        constrain((particleCount-i) + random(-3,4), 1, size) / particleCount);
+        constrain((particleCount-i) + random(-3,4), 2, size) / particleCount);
       //canvas.strokeWeight(
       //  Palette.SimilarTo(colour,0xffb5a55a,30) ?
       //  0.3*size * constrain((particleCount-i) + random(-3,4), 1, size) / particleCount :
       //  size * constrain((particleCount-i) + random(-3,4), 1, size) / particleCount);
-      canvas.stroke(colour & 0x80ffffff);
       canvas.point(bleedingX+centerX, bleedingY+centerY);
     }
     canvas.endDraw();

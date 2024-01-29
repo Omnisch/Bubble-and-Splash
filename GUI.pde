@@ -15,11 +15,12 @@ int TTL;
 float fraction;
 float gravity;
 int imageAlpha;
+boolean darkMode;
 boolean autoBlur;
+boolean highlight;
 boolean translucent;
 boolean hideStroke;
-boolean highlight;
-boolean darkMode;
+boolean rawSplash;
 
 
 
@@ -49,6 +50,12 @@ class GUI
         .setSize(200, 20)
       ,false).getCaptionLabel().setText("poke  all").setColor(0xff);
     
+    // save frame
+    arrangeControllers(
+      cp.addButton("savePaint")
+        .setSize(200, 20)
+      ,false).getCaptionLabel().setText("save  paint").setColor(0xff);
+    
     // TTL
     TTLSlider = (Slider)arrangeControllers(
       cp.addSlider("TTL")
@@ -73,40 +80,13 @@ class GUI
         .setValue(0)
       ,true);
     
-    // original image
+    // alpha value of original image
     arrangeControllers(
       cp.addSlider("imageAlpha")
         .setSize(200, 20)
         .setRange(0, 255)
         .setValue(63)
       ,true).getCaptionLabel().setText("image  alpha");
-    
-    // auto blur
-    arrangeControllers(
-      cp.addToggle("autoBlur")
-        .setSize(60, 20)
-        .setValue(true)
-      ,true).getCaptionLabel().setText("auto  blur");
-    
-    arrangeControllers(
-      cp.addToggle("translucent")
-        .setSize(60, 20)
-        .setValue(false)
-      ,true);
-    
-    // hide stroke
-    arrangeControllers(
-      cp.addToggle("hideStroke")
-        .setSize(60, 20)
-        .setValue(false)
-      ,true).getCaptionLabel().setText("hide  stroke");
-    
-    // highlight
-    arrangeControllers(
-      cp.addToggle("highlight")
-        .setSize(60, 20)
-        .setValue(true)
-      ,true);
     
     // dark mode
     arrangeControllers(
@@ -116,11 +96,40 @@ class GUI
         .setMode(ControlP5.SWITCH)
       ,true).getCaptionLabel().setText("dark  mode");
     
-    // save frame
+    // auto blur splash canvas
     arrangeControllers(
-      cp.addButton("savePaint")
-        .setSize(200, 20)
-      ,false).getCaptionLabel().setText("save  paint").setColor(0xff);
+      cp.addToggle("autoBlur")
+        .setSize(60, 20)
+        .setValue(true)
+      ,true).getCaptionLabel().setText("auto  blur");
+    
+    // highlights on bubbles
+    arrangeControllers(
+      cp.addToggle("highlight")
+        .setSize(60, 20)
+        .setValue(true)
+      ,true);
+    
+    // raw splash
+    arrangeControllers(
+      cp.addToggle("rawSplash")
+        .setSize(60, 20)
+        .setValue(false)
+      ,true).getCaptionLabel().setText("raw  splash");
+    
+    // translucent bubbles
+    arrangeControllers(
+      cp.addToggle("translucent")
+        .setSize(60, 20)
+        .setValue(false)
+      ,true);
+    
+    // hide strokes of bubbles
+    arrangeControllers(
+      cp.addToggle("hideStroke")
+        .setSize(60, 20)
+        .setValue(false)
+      ,true).getCaptionLabel().setText("hide  stroke");
     
     return this;
   }
