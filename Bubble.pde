@@ -16,24 +16,24 @@ class Bubble
   float radius;
   float mass;
   PImage img;
-  PGraphics canvas;
+  PGraphics canvasSplash;
   ArrayList<Bubble> parent;
   int TTL, initTTL;
   
-  Bubble(int x, int y, int scale, PImage img, PGraphics canvas, int TTL)
+  Bubble(int x, int y, int scale, PImage img, PGraphics canvasSplash, int TTL)
   {
     this.vel = new PVector();
     this.acc = new PVector();
     this.radius = random(scale, scale * 4);
     this.mass = radius * radius;
     this.img = img;
-    this.canvas = canvas;
+    this.canvasSplash = canvasSplash;
     this.parent = null;
     setCoord(x, y);
     this.TTL = this.initTTL = TTL;
   }
   
-  void onDraw()
+  void onDraw(PGraphics canvas)
   {
     calcAcc();
     calcVel();
@@ -41,7 +41,7 @@ class Bubble
     
     int pixel = img.pixels[(int)coord.x + (int)coord.y*img.width];
     int fade = (int)map(TTL, initTTL, 0, 0x0, 0xff);
-    fill(pixel & ((fade << 24) + 0xffffff));
+    canvas.fill(pixel & ((fade << 24) + 0xffffff));
     {
       int grayValue =
         (int)((pixel >> 16 & 0xff) * 0.299) +
@@ -52,19 +52,24 @@ class Bubble
       float grayScale = map(TTL, initTTL+2, 0, 0, 1);
       // stroke
       if (hideStroke)
-        noStroke();
+        canvas.noStroke();
       else
-        stroke(0xff363532);
-      fill(lerpColor(color(grayValue), pixel, grayScale));
+        canvas.stroke(0xff363532);
+      canvas.fill(lerpColor(color(grayValue), pixel, grayScale));
     }
-    ellipse(bleedingX+coord.x, bleedingY+coord.y, radius, radius);
+    // fundamental draw
+    if (canvas != g) canvas.beginDraw();
+    canvas.ellipse(bleedingX+coord.x, bleedingY+coord.y, radius, radius);
+    if (canvas != g) canvas.endDraw();
     
     // highlight
     if (highlight)
     {
-      noStroke();
-      fill(0xddffffff);
-      ellipse(bleedingX+coord.x-radius/3, bleedingY+coord.y-radius/3, radius/3, radius/3);
+      canvas.noStroke();
+      canvas.fill(0xddffffff);
+      if (canvas != g) canvas.beginDraw();
+      canvas.ellipse(bleedingX+coord.x-radius/3, bleedingY+coord.y-radius/3, radius/3, radius/3);
+      if (canvas != g) canvas.endDraw();
     }
     
     TTLCheck();
@@ -77,7 +82,7 @@ class Bubble
   void updateParentChunk()
   {
     // do update in every 4 frames
-    if ((TTL & 3) == 0) return;
+    if ((TTL & 3) != 0) return;
     
     if (parent != getChunkByPixel((int)coord.x, (int)coord.y))
     {
@@ -101,7 +106,7 @@ class Bubble
   {
     Splash corpse = new Splash(
       (int)coord.x, (int)coord.y, radius*1.2, vel,
-      img.pixels[(int)coord.x + (int)coord.y*img.width], canvas);
+      img.pixels[(int)coord.x + (int)coord.y*img.width], canvasSplash);
     corpse.onDraw();
     //canvas.fill(img.pixels[(int)coord.x + (int)coord.y*img.width] & 0x80ffffff);
     //canvas.ellipse(coord.x, coord.y, radius, radius);
@@ -201,7 +206,7 @@ class Bubble
 
 
 // bubble functions
-void drawBubbles()
+void drawBubbles(PGraphics canvas)
 {
   for (int i = 0; i < chunks.size(); i++)
   {
@@ -214,7 +219,7 @@ void drawBubbles()
   {
     for (int j = 0; j < chunks.get(i).size(); j++)
     {
-      chunks.get(i).get(j).onDraw();
+      chunks.get(i).get(j).onDraw(canvas);
     }
   }
 }

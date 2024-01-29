@@ -9,8 +9,6 @@ import controlP5.*;
 // global fields
 String imgPath = "data/original";
 PImage img;
-PGraphics splashed;
-PGraphics debugLayer;
 color strokeColor = 0xff363532;
 
 
@@ -23,34 +21,44 @@ void settings()
     exit(); return;
   };
   
+  // deal with too-small original image
+  bleedingY += max((600-img.height)/2, 0);
   size(img.width+2*bleedingX+guiColumnWidth, img.height+2*bleedingY);
 }
 void setup()
 {
   // brush setup
   ellipseMode(RADIUS);
-  strokeWeight(2);
   stroke(strokeColor);
+  strokeWeight(2);
   
-  // init of fields
   initChunks();
-  splashed = newCanvas();
-  gui = new GUI(this).init();
   
-  // deal with too-small original image
-  bleedingY += max((600-img.height)/2, 0);
+  // init canvases
+  int canvasWidth = img.width+2*bleedingX;
+  int canvasHeight = img.height+2*bleedingY;
+  splashed = newCanvas(canvasWidth, canvasHeight);
+  output = newCanvas(canvasWidth, canvasHeight);
+  gizmos = newCanvas(canvasWidth, canvasHeight);
+  
+  gui = new GUI(this).init();
 }
 void draw()
 {
   if (mousePressed && mouseButton == LEFT)
     setBubble(mouseX, mouseY);
 
-  drawBackground();
-  drawOriginal();
+  drawBackground(g);
+  drawOriginal(g);
+  // splashes
   tryBlurCanvas(splashed);
-  drawCanvas(splashed);
-  drawBubbles();
-  drawCursor();
+  drawCanvas(g, splashed);
+  // bubbles
+  drawBubbles(g);
+  // gizmos
+  gizmos.clear();
+  drawCursor(gizmos);
+  drawCanvas(g, gizmos);
 }
 
 

@@ -2,20 +2,26 @@
 //
 //
 // canvas fields
+PGraphics splashed;
+PGraphics output;
+PGraphics gizmos;
 int blurLoopTick = 0;
 
 
 
 // canvas functions
-PGraphics newCanvas()
+PGraphics newCanvas(int canvasWidth, int canvasHeight)
 {
   PGraphics canvas;
-  canvas = createGraphics(width, height);
+  canvas = createGraphics(canvasWidth, canvasHeight);
   canvas.beginDraw();
   canvas.ellipseMode(RADIUS);
   canvas.endDraw();
   return canvas;
 }
+
+
+
 void blurCanvas(PGraphics canvas)
 {
   PImage blurred = createImage(canvas.width, canvas.height, ARGB);
@@ -45,7 +51,7 @@ boolean tryBlurCanvas(PGraphics canvas)
 {
   if (!autoBlur) return false;
   
-  if (++blurLoopTick > 256)
+  if (++blurLoopTick > 128)
   {
     blurLoopTick = 0;
     blurCanvas(canvas);
@@ -54,32 +60,43 @@ boolean tryBlurCanvas(PGraphics canvas)
   else
     return false;
 }
-void drawCanvas(PGraphics toDraw)
+
+
+
+void drawCanvas(PGraphics canvas, PGraphics toDraw)
 {
-  image(toDraw, 0, 0);
+  if (canvas != g) canvas.beginDraw();
+  canvas.image(toDraw, 0, 0);
+  if (canvas != g) canvas.endDraw();
 }
-void drawBackground()
+void drawBackground(PGraphics canvas)
 {
-  background(darkMode ? 0xff1d1d1f : 0xfff5f5f7);
+  if (canvas != g) canvas.beginDraw();
+  canvas.background(darkMode ? 0xff1d1d1f : 0xfff5f5f7);
+  if (canvas != g) canvas.endDraw();
 }
-void drawOriginal()
+void drawOriginal(PGraphics canvas)
 {
-  tint(0xff, imageAlpha);
-  image(img, bleedingX, bleedingY);
-  tint(0xff);
+  if (canvas != g) canvas.beginDraw();
+  canvas.tint(0xff, imageAlpha);
+  canvas.image(img, bleedingX, bleedingY);
+  canvas.tint(0xff);
+  if (canvas != g) canvas.endDraw();
 }
-void drawCursor()
+void drawCursor(PGraphics canvas)
 {
-  stroke(strokeColor);
-  noFill();
-  ellipse(mouseX, mouseY, scale * 4, scale * 4);
+  if (canvas != g) canvas.beginDraw();
+  canvas.stroke(strokeColor);
+  canvas.strokeWeight(2);
+  canvas.noFill();
+  canvas.ellipse(mouseX, mouseY, scale * 4, scale * 4);
+  if (canvas != g) canvas.endDraw();
 }
-// no need to call in draw()
-void drawAssistantGrid(PGraphics canvas)
+void drawChunkGrid(PGraphics canvas)
 {
-  canvas.strokeWeight(1);
-  canvas.stroke(0xffa0a0a0);
   canvas.beginDraw();
+  canvas.stroke(0xffa0a0a0);
+  canvas.strokeWeight(1);
   int maxX = bleedingX+img.width + 8*maxScale - img.width%(8*maxScale);
   int maxY = bleedingY+img.height + 8*maxScale - img.height%(8*maxScale);
   for (int x = bleedingX; x <= maxX; x += 8*maxScale)

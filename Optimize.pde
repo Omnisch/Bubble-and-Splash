@@ -38,10 +38,6 @@ ArrayList<Bubble> getChunkByPixel(int x, int y)
 
 
 
-ArrayList<ArrayList<Bubble>> get2x2ChunksByPixel(int x, int y)
-{
-  return null;
-}
 ArrayList<ArrayList<Bubble>> get3x3ChunksByPixel(int x, int y)
 {
   ArrayList<ArrayList<Bubble>> result = new ArrayList<ArrayList<Bubble>>();

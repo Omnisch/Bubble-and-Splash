@@ -6,6 +6,7 @@ GUI gui;
 int bleedingX = 50;
 int bleedingY = 50;
 int guiColumnWidth = 260;
+int saveCount = 0;
 
 
 
@@ -110,9 +111,9 @@ class GUI
     
     // save frame
     arrangeControllers(
-      cp.addButton("saveFrame")
+      cp.addButton("savePaint")
         .setSize(200, 20)
-      ,false).getCaptionLabel().setText("save  photo").setColor(0xff);
+      ,false).getCaptionLabel().setText("save  paint").setColor(0xff);
     
     return this;
   }
@@ -148,7 +149,7 @@ void controlEvent(ControlEvent event)
 // called by button clearCanvas
 void clearCanvas()
 {
-  splashed = newCanvas();
+  splashed = newCanvas(img.width+2*bleedingX, img.height+2*bleedingY);
 }
 // called by button pokeAll
 void pokeAll()
@@ -181,4 +182,14 @@ void clampTTL()
     gui.TTLSlider.setRange(0, maxTTL)
              .setValue(constrain(gui.TTLSlider.getValue(), 0, maxTTL))
              .getCaptionLabel().align(ControlP5.LEFT, ControlP5.TOP_OUTSIDE);
+}
+// called by button savePaint
+void savePaint()
+{
+  output.clear();
+  drawBackground(output);
+  drawOriginal(output);
+  drawCanvas(output, splashed);
+  drawBubbles(output);
+  output.save("save-" + saveCount++ + ".tif");
 }
