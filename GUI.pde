@@ -5,7 +5,7 @@
 GUI gui;
 int bleedingX = 50;
 int bleedingY = 50;
-int guiColumnWidth = 260;
+int guiColumnWidth = 240;
 int saveCount = 0;
 
 
@@ -17,9 +17,10 @@ float gravity;
 int imageAlpha;
 boolean darkMode;
 boolean autoBlur;
-boolean highlight;
+boolean drawStroke;
 boolean translucent;
-boolean hideStroke;
+boolean highlight;
+boolean singleMode;
 boolean rawSplash;
 
 
@@ -41,25 +42,25 @@ class GUI
     // clear canvas
     arrangeControllers(
       cp.addButton("clearSplash")
-        .setSize(200, 20)
+        .setSize(180, 20)
       ,false).getCaptionLabel().setText("clear  canvas").setColor(0xff);
     
     // poke all
     arrangeControllers(
       cp.addButton("pokeAll")
-        .setSize(200, 20)
+        .setSize(180, 20)
       ,false).getCaptionLabel().setText("poke  all").setColor(0xff);
     
     // save frame
     arrangeControllers(
       cp.addButton("savePaint")
-        .setSize(200, 20)
+        .setSize(180, 20)
       ,false).getCaptionLabel().setText("save  paint").setColor(0xff);
     
     // TTL
     TTLSlider = (Slider)arrangeControllers(
       cp.addSlider("TTL")
-        .setSize(200, 20)
+        .setSize(180, 20)
         .setRange(0, 512)
         .setValue(128)
       ,true);
@@ -67,7 +68,7 @@ class GUI
     // fraction
     arrangeControllers(
       cp.addSlider("fraction")
-        .setSize(200, 20)
+        .setSize(180, 20)
         .setRange(0, 1)
         .setValue(0.1)
       ,true);
@@ -75,7 +76,7 @@ class GUI
     // gravity
     gravitySlider = (Slider)arrangeControllers(
       cp.addSlider("gravity")
-        .setSize(200, 20)
+        .setSize(180, 20)
         .setRange(0, 3)
         .setValue(0)
       ,true);
@@ -83,7 +84,7 @@ class GUI
     // alpha value of original image
     arrangeControllers(
       cp.addSlider("imageAlpha")
-        .setSize(200, 20)
+        .setSize(180, 20)
         .setRange(0, 255)
         .setValue(63)
       ,true).getCaptionLabel().setText("image  alpha");
@@ -103,6 +104,20 @@ class GUI
         .setValue(true)
       ,true).getCaptionLabel().setText("auto  blur");
     
+    // draw strokes of bubbles
+    arrangeControllers(
+      cp.addToggle("drawStroke")
+        .setSize(60, 20)
+        .setValue(true)
+      ,true).getCaptionLabel().setText("draw  stroke");
+    
+    // translucent bubbles
+    arrangeControllers(
+      cp.addToggle("translucent")
+        .setSize(60, 20)
+        .setValue(true)
+      ,true);
+    
     // highlights on bubbles
     arrangeControllers(
       cp.addToggle("highlight")
@@ -110,26 +125,19 @@ class GUI
         .setValue(true)
       ,true);
     
+    // single mode
+    arrangeControllers(
+      cp.addToggle("singleMode")
+        .setSize(60, 20)
+        .setValue(false)
+      ,true).getCaptionLabel().setText("single  mode");
+    
     // raw splash
     arrangeControllers(
       cp.addToggle("rawSplash")
         .setSize(60, 20)
         .setValue(false)
       ,true).getCaptionLabel().setText("raw  splash");
-    
-    // translucent bubbles
-    arrangeControllers(
-      cp.addToggle("translucent")
-        .setSize(60, 20)
-        .setValue(false)
-      ,true);
-    
-    // hide strokes of bubbles
-    arrangeControllers(
-      cp.addToggle("hideStroke")
-        .setSize(60, 20)
-        .setValue(false)
-      ,true).getCaptionLabel().setText("hide  stroke");
     
     return this;
   }

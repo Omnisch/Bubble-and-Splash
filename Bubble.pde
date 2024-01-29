@@ -62,10 +62,10 @@ class Bubble
       canvas.fill(lerpColor(color(grayValue), pixel, grayScale));
     }
     // stroke
-    if (hideStroke)
-      canvas.noStroke();
-    else
+    if (drawStroke)
       canvas.stroke(0xff363532);
+    else
+      canvas.noStroke();
     // draw bubble
     canvas.ellipse(bleedingX+coord.x, bleedingY+coord.y, radius, radius);
     if (canvas != g) canvas.endDraw();

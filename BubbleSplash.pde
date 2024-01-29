@@ -12,7 +12,7 @@ void settings()
   }
   // deal with too-small original image
   bleedingX += max((600-img.width)/2, 0);
-  bleedingY += max((600-img.height)/2, 0);
+  bleedingY += max((720-img.height)/2, 0);
   size(img.width+2*bleedingX+guiColumnWidth, img.height+2*bleedingY);
 }
 
@@ -38,7 +38,8 @@ void setup()
 void draw()
 {
   if (mousePressed && mouseButton == LEFT)
-    setBubble(mouseX, mouseY);
+    if (!singleMode)
+      setBubble(mouseX, mouseY);
   // background
   drawBackground(g);
   drawOriginal(g);
@@ -66,6 +67,9 @@ void keyPressed()
 }
 void mousePressed()
 {
+  if (mouseButton == LEFT)
+    if (singleMode)
+      setBubble(mouseX, mouseY);
   if (mouseButton == RIGHT)
     tryPokeFrom(mouseX, mouseY);
   if (mouseButton == CENTER)
