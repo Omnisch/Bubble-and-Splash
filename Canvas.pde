@@ -3,7 +3,6 @@
 //
 // canvas fields
 PGraphics splashed;
-PGraphics output;
 PGraphics gizmos;
 int blurLoopTick = 0;
 
@@ -16,8 +15,14 @@ PGraphics newCanvas(int canvasWidth, int canvasHeight)
   canvas = createGraphics(canvasWidth, canvasHeight);
   canvas.beginDraw();
   canvas.ellipseMode(RADIUS);
+  canvas.stroke(0xff363532);
+  canvas.strokeWeight(2);
   canvas.endDraw();
   return canvas;
+}
+PGraphics newCanvas(PGraphics canvas)
+{
+  return newCanvas(canvas.width, canvas.height);
 }
 
 
@@ -86,8 +91,6 @@ void drawOriginal(PGraphics canvas)
 void drawCursor(PGraphics canvas)
 {
   if (canvas != g) canvas.beginDraw();
-  canvas.stroke(strokeColor);
-  canvas.strokeWeight(2);
   canvas.noFill();
   canvas.ellipse(mouseX, mouseY, scale * 4, scale * 4);
   if (canvas != g) canvas.endDraw();

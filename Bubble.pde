@@ -281,3 +281,15 @@ boolean tryPokeFrom(int x, int y)
   }
   return false;
 }
+// poke all the bubbles
+void pokeAll()
+{
+  for (int i = 0; i < chunks.size(); i++)
+  {
+    // poke() lets the size of the ArrayList minus 1
+    while (chunks.get(i).size() > 0)
+    {
+      chunks.get(i).get(0).poke();
+    }
+  }
+}

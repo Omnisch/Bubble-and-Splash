@@ -6,20 +6,13 @@ import controlP5.*;
 
 
 
-// global fields
-String imgPath = "data/original";
-PImage img;
-color strokeColor = 0xff363532;
-
-
-
 // main thread
 void settings()
 {
   if (!tryLoadImage())
   {
     exit(); return;
-  };
+  }
   
   // deal with too-small original image
   bleedingY += max((600-img.height)/2, 0);
@@ -27,27 +20,28 @@ void settings()
 }
 void setup()
 {
-  // brush setup
+  // canvas setup
   ellipseMode(RADIUS);
-  stroke(strokeColor);
+  stroke(0xff363532);
   strokeWeight(2);
-  
-  initChunks();
-  
-  // init canvases
   int canvasWidth = img.width+2*bleedingX;
   int canvasHeight = img.height+2*bleedingY;
   splashed = newCanvas(canvasWidth, canvasHeight);
   output = newCanvas(canvasWidth, canvasHeight);
   gizmos = newCanvas(canvasWidth, canvasHeight);
   
+  // chunk setup
+  initChunks();
+  
+  // gui setup
   gui = new GUI(this).init();
 }
 void draw()
 {
   if (mousePressed && mouseButton == LEFT)
     setBubble(mouseX, mouseY);
-
+  
+  // background
   drawBackground(g);
   drawOriginal(g);
   // splashes
@@ -82,35 +76,4 @@ void mouseWheel(MouseEvent event)
 {
   scale += -event.getCount();
   scale = constrain(scale, minScale, maxScale);
-}
-
-
-
-// custom functions
-boolean tryLoadImage()
-{
-  String[] extensions = { ".jpg", ".png", ".gif", };
-  for (int i = 0; i < extensions.length; i++)
-  {
-    img = loadImage(imgPath + extensions[i]);
-    if (img != null)
-    {
-      resizeImage(img);
-      return true;
-    }
-  }
-  return false;
-}
-// resize the image so that
-// it won't be out of the screen
-PImage resizeImage(PImage source)
-{
-  float xRatio = (displayWidth-2*bleedingX-guiColumnWidth) / (float)source.width;
-  float yRatio = (displayHeight-2*bleedingY-40) / (float)source.height;
-  float ratio = min(xRatio, yRatio);
-  if (ratio < 1 && ratio > 0)
-  {
-    source.resize(floor(source.width*ratio), floor(source.height*ratio));
-  }
-  return source;
 }

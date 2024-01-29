@@ -38,7 +38,7 @@ class GUI
   {
     // clear canvas
     arrangeControllers(
-      cp.addButton("clearCanvas")
+      cp.addButton("clearSplash")
         .setSize(200, 20)
       ,false).getCaptionLabel().setText("clear  canvas").setColor(0xff);
     
@@ -141,27 +141,12 @@ void controlEvent(ControlEvent event)
 {
   if (gui == null) return;
   
+  if (event.isFrom("clearSplash"))
+    splashed = newCanvas(splashed);
   if (event.isFrom("gravity"))
     clampTTL();
-  else if (event.isFrom("TTL"))
+  if (event.isFrom("TTL"))
     checkTTLEdge();
-}
-// called by button clearCanvas
-void clearCanvas()
-{
-  splashed = newCanvas(img.width+2*bleedingX, img.height+2*bleedingY);
-}
-// called by button pokeAll
-void pokeAll()
-{
-  for (int i = 0; i < chunks.size(); i++)
-  {
-    // poke() lets the size of the ArrayList minus 1
-    while (chunks.get(i).size() > 0)
-    {
-      chunks.get(i).get(0).poke();
-    }
-  }
 }
 // called by slider TTL
 void checkTTLEdge()
@@ -182,14 +167,4 @@ void clampTTL()
     gui.TTLSlider.setRange(0, maxTTL)
              .setValue(constrain(gui.TTLSlider.getValue(), 0, maxTTL))
              .getCaptionLabel().align(ControlP5.LEFT, ControlP5.TOP_OUTSIDE);
-}
-// called by button savePaint
-void savePaint()
-{
-  output.clear();
-  drawBackground(output);
-  drawOriginal(output);
-  drawCanvas(output, splashed);
-  drawBubbles(output);
-  output.save("save-" + saveCount++ + ".tif");
 }
