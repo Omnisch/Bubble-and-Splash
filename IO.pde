@@ -42,7 +42,15 @@ void savePaint()
   output.clear();
   drawBackground(output);
   drawOriginal(output);
-  drawCanvas(output, splashed);
+  // drawCanvas() has an unclear bug
+  // it cannot update after first save
+  // so use codes in brackets instead
+  //drawCanvas(output, splashed);
+  {
+    output.beginDraw();
+    output.image(splashed.copy(), 0, 0);
+    output.endDraw();
+  }
   drawBubbles(output);
   output.save("save-" + saveCount++ + ".tif");
 }

@@ -97,7 +97,7 @@ void drawCursor(PGraphics canvas)
 }
 void drawChunkGrid(PGraphics canvas)
 {
-  canvas.beginDraw();
+  if (canvas != g) canvas.beginDraw();
   canvas.stroke(0xffa0a0a0);
   canvas.strokeWeight(1);
   int maxX = bleedingX+img.width + 8*maxScale - img.width%(8*maxScale);
@@ -108,5 +108,5 @@ void drawChunkGrid(PGraphics canvas)
     for (int y = bleedingY; y <= maxY; y += 8*maxScale)
       canvas.line(bleedingX, y, maxX, y);
   }
-  canvas.endDraw();
+  if (canvas != g) canvas.endDraw();
 }
